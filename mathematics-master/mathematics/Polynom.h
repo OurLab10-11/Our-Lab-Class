@@ -69,8 +69,21 @@ public:
         }
         else
         {
-            coeff[0] = stod(D);
-            deg = 0;
+            int i;
+            for (i = 0; i < D.length(); ++i)
+                if (isalpha(D[i]))
+                    break;
+            if (i == D.length())
+            {
+                coeff[0] = stod(D);
+                deg = 0;
+            }
+            else
+            {
+                for(int j = 0; j < D.length(); ++j)
+                    coeff[i] = int(D[j]);
+                deg = D.length() - 1;
+            }
         }
            
     }

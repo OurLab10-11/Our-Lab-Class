@@ -168,6 +168,8 @@ public:
                     {
                         Polynom<int>* O = new Polynom<int>(input);
                         result[j].addToken(O);
+                        if (input !="x")
+                            result[j].result.back()->a = input;
                         input = "";
                         continue;
                     }

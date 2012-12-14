@@ -42,6 +42,12 @@ private:
         {
             if (temp.result[i]->isPolynom())
             {
+                if ((temp.result[i]->a != "") && (temp.result[i]->a != "x"))
+                {
+                    Polynom<int>* A = new Polynom<int>(newNames.getVariable(temp.result[i]->a));
+                    vect.push_back(A);
+                    continue;
+                }
                 vect.push_back(temp.result[i]);
                 continue;
             }
