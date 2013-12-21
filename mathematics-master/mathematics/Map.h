@@ -1,7 +1,43 @@
 #pragma once;
-template<typename Key, typename Value>
+template<class Key, class Value>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+
+struct BinaryTree
+{
+    double key; // индекс выражения
+    BinaryTree*left;
+    BinaryTree*right;
+    BinaryTree*parent;
+    int output; // результат выражения
+
+};
+
+struct Variables
+{
+    string variable; // переменная, используемая программой
+    Variables*left;
+    Variables*right;
+    Variables*parent;
+    int value; // значение переменной
+};
+
+BinaryTree *root;
+Variables *var_root;
+
 class Map
 {
+public:
+    Map();
+    void setVariable(string variable, int value); // функция для занесения переменной и ее значения в память
+    int getVariable(string variable); // функция, которая по имени переменной возвращает ее значение
+    void setOutput(int key, int output); // функция для занесения результата в память программы
+    int getOutput(int key); // функция, которая по индексу выражения возвращает число - результат вычисления
+
+private:	
 
     //implement template of Map<K, V>
     //probably the best variant for your purposes is implement map, 

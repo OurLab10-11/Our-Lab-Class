@@ -2,6 +2,7 @@
 #include "Result.h"
 #include <string>
 #include <stack>
+#include <algorithm>
 
 using std::string;
 
@@ -13,10 +14,10 @@ Parser::Parser(const IOHandler& h)
 bool checkUp(string temp)
 {
     stack <char> brackets;
-    
+
 }
 
-void Parser::probeli(string temp)
+void Parser::deleteSpace(string temp)
 {
     Result result;
     int length = temp.length();
@@ -34,20 +35,33 @@ void Parser::probeli(string temp)
             }
         }
     }
+    for (int position = 0; position < length; ++position)
+    {
+        if ((isalpha(temp[position + 1]) && isdigit(temp[position])) || (isalpha(temp[position]) && isdigit(temp[position + 1])))
+            temp.insert('*',position,1);
+    }
 }
 
 Result Parser::command(string temp)
 {
     Result result;
-    probeli(temp);
+    deleteSpace(temp);
     int length = temp.length();
     temp += ' ';
     string input = "";
+    if (temp[0] == '-' )
+    {
+        input +=temp[0];
+    }
     for (int  i = 0; i < length; ++i)
     {
         if (temp[i] == ' ')
             break;
-        
+        if (temp[i] == '-'&& i > 0 && (isOperation(temp[i - 1]) || isBraket(temp[i - 1])))
+        { 
+            input +='-';
+            continue;
+        }
         if (isOperation(temp[i]) && temp[i + 1] == 'i')
         {
             input = temp[i];
@@ -75,7 +89,7 @@ Result Parser::command(string temp)
             result.addToken(T);
             continue;
         }
- 
+
         if (isOperation(temp[i]))
         {
             input = temp[i];
@@ -111,44 +125,4 @@ Result Parser::command(string temp)
         }
     }
     return result;
-}
-
-bool isOperation(char a)
-{
-    if (a == '-' || a == '+' || a == '=' || a == '*' || a == '/' || a == '^')
-        return true;
-    else
-        return false;
-}
-
-bool isValue(char a)
-{
-    if (a >= '0' && a <='9')
-        return true;
-    else
-        return false;
-}
-
-bool isVariable(char a)
-{
-    if ((a >= 'a' && a <= 'z' || a == 'A' && a == 'Z') && a !='x')
-        return true;
-    else
-        return false;
-}
-
-bool isSeparator(char a)
-{
-    if (a == ';' || a == ',')
-        return true;
-    else
-        return false;
-}
-
-bool isBraket(char a)
-{
-    if (a == '(' || a == ')' || a == '[' || a == ']')
-        return true;
-    else
-        return false;
 }
