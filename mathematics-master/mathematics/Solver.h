@@ -7,18 +7,19 @@
 #include "Polynom.h"
 #include "Operation.h"
 #include <stack>
+#include "Map.h"
 
 using namespace std;
 
 class Solver
 {
 private:
-    //Map<string, Polynom<int>> newNames;
+    Map<string, Polynom<int>> newNames;
     Result opz;
     Result initial;
     void makeOPZ(const Result& temp)
     {
-        
+        /*
         vector <Token> vect;
         stack <Token> stak;
         for (int i = 0; i < temp.result.size(); ++i)
@@ -48,6 +49,7 @@ private:
         //to do OPZ from tokens.
         //initial is the field already partitioned.
         //just make opz from it and write to opz field.
+        */
     }
     void makeEquals()
     {
@@ -63,13 +65,12 @@ private:
         makeEquals();
     };
 public:
-    //Map<string, Polynom<int>> getEquals();
+    Map<string, Polynom<int>> getEquals();
     string execute(const Result& r)
     {
         makeOPZ(r);
         init(r);
-        //executing opz
-        //must return polynom
+        //executing opz , must return polynom
         return "";
     }
 };

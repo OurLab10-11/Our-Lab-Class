@@ -6,6 +6,7 @@
 #include "Solver.h"
 #include "Number.h"
 #include "Operation.h"
+#include "Map.h"
 
 using std::string;
 using std::iostream;
@@ -61,6 +62,7 @@ public://Parser();
     Result command(string temp)
     {
         Result result;
+        
         temp = deleteSpace(temp);
         int length = temp.length();
         temp += " ";
@@ -203,7 +205,7 @@ class IOHandler
 private:
     Parser parser;
     Solver solver;
-    //Map<string, Polynom<int>> polynoms; //  variables
+    Map<string, Polynom<int>> polynoms; //  variables
     vector<Polynom<int>> previousResults; // to support previous polynoms calls.
 public:
     //IOHandler();
@@ -226,16 +228,17 @@ public:
     //2 methods for solver.
     Polynom<int> getVariable(string variableName)
     {
+        return polynoms.getVariable(variableName);
         //extracting from the map value of variableName
         //must throws exception if variable with this name does not exist.
         //return map.get(variableName);
-        return NULL;
+        
     }
-    Polynom<int> getPreviousResult(int number)
+    Polynom<int> getPreviousResult(int Number)
     {
         //to do
         //must throws exception if number out of bounds
-        return previousResults[number];
+        return previousResults[Number];
     }
 };
 

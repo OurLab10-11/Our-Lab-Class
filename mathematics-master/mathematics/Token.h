@@ -2,8 +2,7 @@
 #include <iostream>
 #include <string>
 
-using std::iostream;
-using std::string;
+using namespace std;
 
 class Token
 {

@@ -13,7 +13,6 @@ public:
     {
         result.push_back(t);
     }
-
     //add some methods (probably iterators or just get for vector) 
     //to access result.
 };

@@ -3,8 +3,7 @@
 #include "Token.h"
 #include <iostream>
 
-using std::iostream;
-using std::string;
+using namespace std;
 
 class Operation : public Token
 {
