@@ -1,5 +1,7 @@
-#pragma once;
+#pragma once
 #include "Token.h"
+#include <string>
+#include <iostream>
 
    /*//implement templated class Polynom.
   //you can use following operations: T + T, T - T, T * T, T / T, T ^ int
@@ -35,57 +37,52 @@
 
 
   //important remark 2: don't worry about ": public Token", it's for my needs (for parsing input string)*/
-    //JK_QQ's comments;
-template<class Number>
-class Polynom: public Token
+
+template <class T> class Polynom : public Token
 {
 private:
     static const int N = 10000;
-    Number coeff[N];
+    T coeff[N];
     int deg;
-    Polynom<Number> multByPowOfX(int);
-    
+    Polynom<T> multByPowOfX(int);
 public:
     Polynom();
-    Polynom(const Polynom<Number>&);
-    Polynom(Number);
+    Polynom(const Polynom<T>&);
+    Polynom(T);
+    Polynom(string);
     int& getDeg();
-    Number& getValue(const Numb& x);
+    T& getValue(const T& x);
     
-    Polynom<Number> operator=(const Polynom<Number>&);
-    Number& operator[](const int);
+    Polynom<T> operator=(const Polynom<T>&);
+    T& operator[](const int);
     
-    template<typename T>
-    friend std::ostream& operator<<(std::ostream&, Polynom<T>);
+    template<typename T1>
+    friend std::ostream& operator<<(std::ostream&, Polynom<T1>);
     
-    template<typename T>
-    friend std::istream& operator>>(std::istream&, Polynom<T>&);
+    template<typename T1>
+    friend std::istream& operator>>(std::istream&, Polynom<T1>&);
     
-    Polynom<Number> operator+(const Polynom<Numb>&);
-    Polynom<Number> operator-(const Polynom<Numb>&);
-    Polynom<Number> operator*(const Polynom<Numb>&);
-    Polynom<Number> operator/(const Polynom<Numb>&);
-    Polynom<Number> operator%(const Polynom<Numb>&);
+    Polynom<T> operator+(const Polynom<T>&);
+    Polynom<T> operator-(const Polynom<T>&);
+    Polynom<T> operator*(const Polynom<T>&);
+    Polynom<T> operator/(const Polynom<T>&);
+    Polynom<T> operator%(const Polynom<T>&);
     
-    Polynom<Number> operator+=(const Polynom<Numb>&);
-    Polynom<Number> operator-=(const Polynom<Numb>&);
-    Polynom<Number> operator*=(const Polynom<Numb>&);
-    Polynom<Number> operator/=(const Polynom<Numb>&);
-    Polynom<Number> operator%=(const Polynom<Numb>&);
+    Polynom<T> operator+=(const Polynom<T>&);
+    Polynom<T> operator-=(const Polynom<T>&);
+    Polynom<T> operator*=(const Polynom<T>&);
+    Polynom<T> operator/=(const Polynom<T>&);
+    Polynom<T> operator%=(const Polynom<T>&);
     
 };
-
-template<class Number>
-std::ostream& operator<<(std::ostream& os, Polynom<Numb> a)
+template <class T> std::ostream& operator<<(std::ostream& os, Polynom<T> a)
 {
     for (int i = 0; i <= a.deg; i++)
         os << a.coeff[i] << "   ";
     
     return os;
 }
-
-template <class Number>
-std::istream& operator>>(std::istream& is, Polynom<Numb>& a)
+template <class T> std::istream& operator>>(std::istream& is, Polynom<T>& a)
 {
     int n;
     is >> n;
@@ -93,33 +90,27 @@ std::istream& operator>>(std::istream& is, Polynom<Numb>& a)
     a.deg = n;
     for (int i = 0; i <= n; i++)
     {
-        Numb value;
+        T value;
         is >> value;
         a[i] = value;
     }
     
     return is;
 }
-
-template <class Number>
-Polynom<Number>::Polynom()
+template <class T> Polynom<T>::Polynom()
 {
     for (int i = 0; i < N; i++)
         coeff[i] = 0;
     
     deg = 0;
 }
-
-template <class Number>
-Polynom<Number>::Polynom(const Polynom<Number>& b)
+template <class T> Polynom<T>::Polynom(const Polynom<T>& b)
 {
     deg = b.deg;
     for (int i = 0; i < N; i++)
         coeff[i] = b.coeff[i];
 }
-
-template <class Number>
-Polynom<Number>::Polynom(Number b)
+template <class T> Polynom<T>::Polynom(T b)
 {
     coeff[0] = b;
     
@@ -130,26 +121,11 @@ Polynom<Number>::Polynom(Number b)
     
     deg = 0;
 }
-
-template <class Number>
-Number& Polynom<Number>::operator[](int i)
-{
-    if ((i < 0) || (i >= N))
-    {
-        std::cout << "Polynom::operator[] out of range\n";
-    }
-    
-    return coeff[i];
-}
-
-template <class Number>
-int& Polynom<Number>::getDeg()
+template <class T> int& Polynom<T>::getDeg()
 {
     return deg;
 }
-
-template <class Number>
-Number& Polynom<Number>::getValue(const Number& x)
+template <class T> T& Polynom<T>::getValue(const T& x)
 {
     Numb value = 0;
     int powerOfX = 1;
@@ -162,9 +138,7 @@ Number& Polynom<Number>::getValue(const Number& x)
     
     return value;
 }
-
-template <class Number>
-Polynom<Number> Polynom<Number>::multByPowOfX(int powOfX)
+template <class T> Polynom<T> Polynom<T>::multByPowOfX(int powOfX)
 {
     for (int i = deg; i >= 0; i--)
         coeff[i + powOfX] = coeff[i];
@@ -175,9 +149,16 @@ Polynom<Number> Polynom<Number>::multByPowOfX(int powOfX)
     
     return *this;
 }
-
-template <class Number>
-Polynom<Number> Polynom<Number>::operator=(const Polynom<Number>& b)
+template <class T> T& Polynom<T>::operator[](int i)
+{
+    if ((i < 0) || (i >= N))
+    {
+        std::cout << "Polynom::operator[] out of range\n";
+    }
+    
+    return coeff[i];
+}
+template <class T> Polynom<T> Polynom<T>::operator=(const Polynom<T>& b)
 {
     for (int i = 0; i<=deg; i++)
         coeff[i] = 0;
@@ -187,11 +168,9 @@ Polynom<Number> Polynom<Number>::operator=(const Polynom<Number>& b)
     
     return *this;
 }
-
-template <class Number>
-Polynom<Number> Polynom<Number>::operator+(const Polynom<Number>& b)
+template <class T> Polynom<T> Polynom<T>::operator+(const Polynom<T>& b)
 {
-    Polynom<Number> c;
+    Polynom<T> c;
     c.deg = 0;
     int degB = b.deg;
     int maxDeg = 0;
@@ -205,9 +184,7 @@ Polynom<Number> Polynom<Number>::operator+(const Polynom<Number>& b)
     
     return c;
 }
-
-template <class Number>
-Polynom<Number> Polynom<Number>::operator-(const Polynom<Number>& b)
+template <class T> Polynom<T> Polynom<T>::operator-(const Polynom<T>& b)
 {
     Polynom c;
     c.deg = 0;
@@ -223,9 +200,7 @@ Polynom<Number> Polynom<Number>::operator-(const Polynom<Number>& b)
     
     return c;
 }
-
-template <class Number>
-Polynom<Number> Polynom<Number>::operator*(const Polynom<Number>& b)
+template <class T> Polynom<T> Polynom<T>::operator*(const Polynom<T>& b)
 {
     Polynom c;
     if (!(((coeff[0] == 0) && deg == 0) || ((b.coeff[0] == 0) && (b.deg == 0))))
@@ -249,9 +224,7 @@ Polynom<Number> Polynom<Number>::operator*(const Polynom<Number>& b)
     
     return c;
 }
-
-template <class Number>
-Polynom<Number> Polynom<Number>::operator/(const Polynom<Number>& b)     //   RETYPE!!!
+template <class T> Polynom<T> Polynom<T>::operator/(const Polynom<T>& b)     //   RETYPE!!!
 {
     Polynom c;
     Polynom temp;
@@ -273,9 +246,7 @@ Polynom<Number> Polynom<Number>::operator/(const Polynom<Number>& b)     //   RE
     
     return c;
 }
-
-template <class Number>
-Polynom<Number> Polynom<Number>::operator%(const Polynom<Number>& b)   // RETYPE!!!
+template <class T> Polynom<T> Polynom<T>::operator%(const Polynom<T>& b)   // RETYPE!!!
 {
     Polynom c;
     Polynom temp;
@@ -297,9 +268,7 @@ Polynom<Number> Polynom<Number>::operator%(const Polynom<Number>& b)   // RETYPE
     
     return rem;
 }
-
-template <class Number>
-Polynom<Number> Polynom<Number>::operator+=(const Polynom<Number>& b)
+template <class T> Polynom<T> Polynom<T>::operator+=(const Polynom<T>& b)
 {
     int degB = b.deg;
     int maxDeg = 0;
@@ -313,9 +282,7 @@ Polynom<Number> Polynom<Number>::operator+=(const Polynom<Number>& b)
     
     return *this;
 }
-
-template <class Number>
-Polynom<Number> Polynom<Number>::operator-=(const Polynom<Number>& b)
+template <class T> Polynom<T> Polynom<T>::operator-=(const Polynom<T>& b)
 {
     int degB = b.deg;
     int maxDeg = 0;
@@ -329,9 +296,7 @@ Polynom<Number> Polynom<Number>::operator-=(const Polynom<Number>& b)
     
     return *this;
 }
-
-template <class Number>
-Polynom<Number> Polynom<Number>::operator*=(const Polynom<Number>& b)
+template <class T> Polynom<T> Polynom<T>::operator*=(const Polynom<T>& b)
 {
     Polynom c;
     if (!(((coeff[0] == 0) && deg == 0) || ((b.coeff[0] == 0) && (b.deg == 0))))
@@ -356,9 +321,7 @@ Polynom<Number> Polynom<Number>::operator*=(const Polynom<Number>& b)
     *this = c;
     return *this;
 }
-
-template <class Number>
-Polynom<Number> Polynom<Number>::operator/=(const Polynom<Number>& b)    //RETYPE!!!
+template <class T> Polynom<T> Polynom<T>::operator/=(const Polynom<T>& b)    //RETYPE!!!
 {
     Polynom c;
     Polynom temp;
@@ -381,9 +344,7 @@ Polynom<Number> Polynom<Number>::operator/=(const Polynom<Number>& b)    //RETYP
     *this = c;
     return *this;
 }
-
-template <class Number>
-Polynom<Number> Polynom<Number>::operator%=(const Polynom<Number>& b)    //RETYPE!!!
+template <class T> Polynom<T> Polynom<T>::operator%=(const Polynom<T>& b)    //RETYPE!!!
 {
     Polynom c;
     Polynom temp;

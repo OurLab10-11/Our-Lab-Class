@@ -1,8 +1,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "IOHandler.h";
-#include "Parser.h"
+#include "IOHandler.h"
+#include "Complex.h"
+
 using std::string;
 using std::cin;
 using std::cout;
@@ -16,28 +17,23 @@ int main()
     IOHandler handler;
 
     string currentCommand;
-    int currentStep;
+    int currentStep = 0;
 
     while (true)
     {
         currentStep = handler.getCurrentStep();
         cout << "In" << "[" << currentStep << "] >";
-        
+
         getline(cin, currentCommand);
 
         if (!currentCommand.compare("exit"))
             break;
         else
         {
-            if (checkUp(currentCommand))
-            {
-                string response = handler.command(currentCommand);
+            string response = handler.executeCommand(currentCommand);
 
-                cout << "Out" << "[" << currentStep << "] >";
-                cout << response << endl;
-            }
-            else
-                cout << "ERROR" << endl;
+            cout << "Out" << "[" << currentStep << "] >";
+            cout << response << endl;
         }
     }
 

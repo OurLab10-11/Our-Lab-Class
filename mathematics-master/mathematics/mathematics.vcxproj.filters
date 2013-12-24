@@ -39,6 +39,9 @@
     <ClCompile Include="Solver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Complex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IOHandler.h">
@@ -66,6 +69,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Token.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Complex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

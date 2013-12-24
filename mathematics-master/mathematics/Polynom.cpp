@@ -1,7 +1,8 @@
-#include "Polynom.h"
-
-template<typename T>
-Polynom::isOperation()
+/*Polynom::isOperation()
 {
-    return false;
-}
+    if (a[0] == "-" || a[0] == "+"  || a[0] == "*" || a[0] == "/" || a[0] == "^")
+        return true;
+    else
+        return false;
+}*/
+

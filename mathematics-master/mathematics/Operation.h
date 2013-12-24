@@ -1,14 +1,34 @@
-#pragma once;
+#pragma once
 #include <string>
 #include "Token.h"
+#include <iostream>
 
+using std::iostream;
 using std::string;
 
-class Operation: public Token
+class Operation : public Token
 {
+private:
+    string operatoring;
 public:
-    static const string ADD;
-    static const string SUB;
-    static const string MUL;
-    static const string EQ;
+    Operation();
+    Operation(const string &b)
+    {
+        if (b == "+")
+            operatoring = "+";
+        if (b == "-")
+            operatoring = "-";
+        if (b == "*")
+            operatoring = "*";
+        if (b == "/")
+            operatoring = "/";
+        if (b == "^")
+            operatoring = "^";
+        if (b == "=")
+            operatoring = "=";
+    }
 };
+
+
+
+

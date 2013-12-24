@@ -1,21 +1,44 @@
-#pragma once;
-#include "Result.h"
-#include "Polynom.h"
+#pragma once
 #include <string>
-#include <map>
+#include "Map.h"
+#include "Number.h"
+#include "Result.h"
+
 using std::string;
 
 class Solver
 {
 private:
-    map<string, Polynom<Number>> newNames;
+    //Map<string, Polynom<int>> newNames;
     Result opz;
     Result initial;
-
-    void makeOPZ();
-    void makeEquals();
-    void init(const Result& r);
+    void makeOPZ()
+    {
+        return;
+        //to do OPZ from tokens.
+        //initial is the field already partitioned.
+        //just make opz from it and write to opz field.
+    }
+    void makeEquals()
+    {
+        return;
+        //to do
+        //add to newNames all equals
+        //received from current command    
+    };
+    void Solver::init(const Result& r)
+    {
+        initial = r;
+        makeOPZ();
+        makeEquals();
+    };
 public:
-    map<string, Polynom<Number>> getEquals();
-    Polynom<Number> execute(const Result& r);
+    //Map<string, Polynom<int>> getEquals();
+    string execute(const Result& r)
+    {
+        init(r);
+        //executing opz
+        //must return polynom
+        return "";
+    }
 };

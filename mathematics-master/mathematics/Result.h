@@ -1,4 +1,4 @@
-#pragma once;
+#pragma once
 #include <iostream>
 #include <vector>
 #include "Token.h"
@@ -10,7 +10,7 @@ class Result
 private:
     vector<Token> result;
 public:
-    void addToken(const Token& t)
+    void addToken(Token t)
     {
         result.push_back(t);
     }
