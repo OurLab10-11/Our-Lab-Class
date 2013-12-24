@@ -7,13 +7,13 @@ using std::vector;
 
 class Result
 {
-private:
-    vector<Token> result;
 public:
+    vector<Token> result;
     void addToken(Token t)
     {
         result.push_back(t);
     }
+
     //add some methods (probably iterators or just get for vector) 
     //to access result.
 };

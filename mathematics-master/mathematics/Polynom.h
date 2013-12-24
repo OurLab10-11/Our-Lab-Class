@@ -49,7 +49,13 @@ public:
     Polynom();
     Polynom(const Polynom<T>&);
     Polynom(T);
-    Polynom(string);
+    Polynom(string b)
+    {
+        Polynom a;
+        a.deg = 1;
+        coeff[0] = 1;
+        coeff[1] = 2;
+    };
     int& getDeg();
     T& getValue(const T& x);
     

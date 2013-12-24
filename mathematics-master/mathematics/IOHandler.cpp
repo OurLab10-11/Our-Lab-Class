@@ -3,8 +3,6 @@
 #include "Token.h"
 #include "Result.h"
 
-using std::string;
-using std::iostream;
 
 /*IOHandler::IOHandler()
 {

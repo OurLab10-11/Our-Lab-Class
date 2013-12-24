@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <string>
-#include <stack>
 #include "Polynom.h"
 #include "Parser.h"
 #include "Solver.h"
@@ -19,14 +18,54 @@ private://IOHandler parent;     // to extract some variables from parent.
     // change [i] to getPreviousResult and <varName> to getVariable(varName)    
 public://Parser();
     //Parser(IOHandler& h);
+    bool isOperation(char a)
+    {
+        if (a == '-' || a == '+' || a == '=' || a == '*' || a == '/' || a == '^')
+            return true;
+        else
+            return false;
+    }
+    bool isValue(char a)
+    {
+        if (a >= '0' && a <='9')
+            return true;
+        else
+            return false;
+    }
+    bool isVariable(char a)
+    {
+        if ((a >= 'a' && a <= 'z' || a == 'A' && a == 'Z') && a !='x')
+            return true;
+        else
+            return false;
+    }
+    bool isSeparator(char a)
+    {
+        if (a == ';' || a == ',')
+            return true;
+        else
+            return false;
+    }
+    bool isBraket(char a)
+    {
+        if (a == '(' || a == ')' || a == '[' || a == ']')
+            return true;
+        else
+            return false;
+    }
+    bool checkUp(string temp)
+    {
+        stack <int> a;
+        return "";
+    }
     Result command(string temp)
     {
-        Result result;/*
-        deleteSpace(temp);
+        Result result;
+        temp = deleteSpace(temp);
         int length = temp.length();
         temp += " ";
         string input = "";
-        if (temp[0] == '-' )
+        if (temp[0] == '-')
         {
             input +=temp[0];
         }
@@ -43,9 +82,9 @@ public://Parser();
             {
                 input = temp[i];
                 Operation A(input);
-                //result.addToken(A);
+                result.addToken(A);
                 input = "1";
-                Polynom<Number> B(input);
+                Polynom<int> B(input);
                 result.addToken(B);
                 input = "";
                 continue;
@@ -62,11 +101,11 @@ public://Parser();
                 if (isOperation(input[0]) && (1u == input.length()))
                 {
                     Operation A(input);
-                    //result.addToken(A);
+                    result.addToken(A);
                 }
                 else
                 {
-                    Polynom<Number> A(input);
+                    Polynom<int> A(input);
                     result.addToken(A);
                 }
                 input = "";
@@ -77,7 +116,7 @@ public://Parser();
             {
                 input = temp[i];
                 Operation A(input);
-                //result.addToken(A);
+                result.addToken(A);
                 input = "";
                 continue;
             }
@@ -87,7 +126,7 @@ public://Parser();
                 input += temp[i];
                 if (!isdigit(temp[i + 1]) && temp[i + 1] != '.')
                 {
-                    Polynom<Number> A(input);
+                    Polynom<int> A(input);
                     result.addToken(A);
                     input = "";
                     continue;
@@ -104,7 +143,7 @@ public://Parser();
                 input += temp[i];
                 if (!isalpha(temp[i + 1]))
                 {
-                    Polynom<Number> A(input);
+                    Polynom<int> A(input);
                     result.addToken(A);
                     input = "";
                     continue;
@@ -116,18 +155,19 @@ public://Parser();
             if (isOperation(input[0]) && (1u == input.length()))
             {
                 Operation A(input);
-                //result.addToken(A);
+                result.addToken(A);
             }
             else
             {
-                Polynom<Number> A(input);
+                Polynom<int> A(input);
                 result.addToken(A);
             }
 
-        }*/
+        }
+        
         return result;
     };
-    void deleteSpace(string temp)
+    string deleteSpace(string temp)
     {
         Result result;
         int length = temp.length();
@@ -148,22 +188,26 @@ public://Parser();
         for (int position = 0; position < length; ++position)
         {
             if ((isalpha(temp[position + 1]) && isdigit(temp[position])) || (isalpha(temp[position]) && isdigit(temp[position + 1])))
-                temp.insert('*',position,1);
+            {
+                temp.insert(position + 1,"*");
+                ++length;
+            }
+
         }
+        return temp;
     }
 };
 
 class IOHandler
 {
 private:
-    int counter;
     Parser parser;
     Solver solver;
     //Map<string, Polynom<int>> polynoms; //  variables
     vector<Polynom<int>> previousResults; // to support previous polynoms calls.
 public:
     //IOHandler();
-
+    int counter;
     int getCurrentStep()
     {
         return counter;

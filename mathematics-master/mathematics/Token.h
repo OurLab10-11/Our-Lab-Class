@@ -9,28 +9,21 @@ class Token
 {
 public:
     string a;
-    virtual bool isOperation1()
+    virtual bool isOperation(Token)
     {
         if (a == "+" || a == "-" || a == "*" || a == "/")
             return true;
         else
             return false;
     }
-    virtual bool isVariable1()
+    virtual bool isPolynom(Token)
     {
-        if (a.size() == 1 && a[0] == 'x')
+        if (!isOperation(*this) && !isSeparator(*this))
             return true;
         else
             return false;
     }
-    virtual bool isValue1()
-    {
-        if (a[0] >= '0' && a[0] <= '9')
-            return true;
-        else
-            return false;
-    }
-    virtual bool isSeparator1()
+    virtual bool isSeparator(Token)
     {
         if (a == ";" || a == ",")
             return true;

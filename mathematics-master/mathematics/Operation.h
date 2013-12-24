@@ -12,7 +12,7 @@ private:
     string operatoring;
 public:
     Operation();
-    Operation(const string &b)
+    Operation(const string b)
     {
         if (b == "+")
             operatoring = "+";
@@ -26,6 +26,20 @@ public:
             operatoring = "^";
         if (b == "=")
             operatoring = "=";
+    }
+    bool isOpenBracket(Token)
+    {
+        if (this->operatoring == "[" || this->operatoring == "(")
+            return true;
+        else
+            return false;
+    }
+    bool isCloseBracket(Token)
+    {
+        if (this->operatoring == "]" || this->operatoring == ")")
+            return true;
+        else
+            return false;
     }
 };
 

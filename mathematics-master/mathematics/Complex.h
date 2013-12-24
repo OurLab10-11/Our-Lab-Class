@@ -73,6 +73,19 @@ public:
     temp1.im = this->im * temp;
     return temp1;
 };
+
+    template<class T1> friend Complex<T1> operator+(double temp1, Complex<T1>& temp2)
+    {
+        return temp2 + temp1;
+    }
+    template<class T1> friend Complex<T1> operator-(double temp1, Complex<T1>& temp2)
+    {
+        return temp2 - temp1;
+    }
+    template<class T1> friend Complex<T1> operator*(double temp1, Complex<T1>& temp2)
+    {
+        return temp2*temp1;
+    }
     template <class T1> friend ostream& operator << (ostream& os, const Complex<T1>& temp)
 {
     int re = temp.re;

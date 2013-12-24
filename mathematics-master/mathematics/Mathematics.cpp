@@ -11,18 +11,18 @@ using std::vector;
 using std::getline;
 using std::endl;
 
+int currentStep;
+
 
 int main()
 {
     IOHandler handler;
 
     string currentCommand;
-    int currentStep = 0;
-
+    
     while (true)
     {
-        currentStep = handler.getCurrentStep();
-        cout << "In" << "[" << currentStep << "] >";
+        cout << "In" << "[" << currentStep << "] > ";
 
         getline(cin, currentCommand);
 
@@ -32,7 +32,7 @@ int main()
         {
             string response = handler.executeCommand(currentCommand);
 
-            cout << "Out" << "[" << currentStep << "] >";
+            cout << "Out" << "[" << currentStep++ << "] > ";
             cout << response << endl;
         }
     }
