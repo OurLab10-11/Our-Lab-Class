@@ -11,29 +11,17 @@
 
 using namespace std;
 
-
 class Solver
 {
 private:
-    Map<string, Polynom<int>> newNames;
     Result opz;
     Result initial;
-    bool higherPriority (Token *op1, Token *op2) //priority comparison
+    vector<string> keys;
+    vector<Polynom<int>> values;
+    Map<string, Polynom<int>> newNames;
+    Polynom<int> makeOPZ(Result& temp)
     {
-        string operations[] = {"_", "+", "-", "*", "^"};
-        int priority[] = {1, 1, 1, 2, 3};
-        int pr1, pr2;
-        for(int i = 0; i < 5; i++)
-        {
-            if(op1->a == operations[i])
-                pr1=priority[i];
-            if(op2->a == operations[i])
-                pr2=priority[i];
-        }
-        return (pr1>pr2);
-    }
-    void makeOPZ(Result& temp)
-    {
+        //to add 
         vector <Token*> vect;
         stack <Token*> stak;
         for (unsigned int i = 0; i < temp.result.size(); i++)
@@ -79,54 +67,129 @@ private:
                 }
                 stak.push(temp.result[i]);
             }
-            opz.result = vect;
+            temp.result = vect;
         }
+        int i = 0;
+        vector <Polynom<int>*> operands;
+        while (i < temp.result.size())
+        {
+            if (temp.result[i]->isPolynom())
+                operands.push_back(temp.result[i]);
+            else
+            {
+                if (operands.size() < 2)
+                {
+                    //Error: number of operations is more than number of operands.
+                }
+                Polynom <int> m = operands.back()->a;
+                operands.pop_back();
+                Polynom <int> n = operands.back()->a;
+                operands.pop_back();
+                switch (temp.result[i]->isOperation())
+                {
+                case 1:
+                    {    m += n;
+                    Polynom <int> * k = new Polynom <int> (m);
+                    operands.push_back(k);
+                    delete [] k;
+                    break;
+                    }
+                case 2:
+                    {
+                        m -= n;
+                        Polynom <int> * k = new Polynom <int> (m);
+                        operands.push_back(k);
+                        delete [] k;
+                        break;
+                    }
+                case 3:
+                    {
+                        m *= n;
+                        Polynom <int> * k = new Polynom <int> (m);
+                        operands.push_back(k);
+                        delete [] k;
+                        break;
+                    }
+                case 4:
+                    {
+                        m = m ^ n;
+                        Polynom <int> * k = new Polynom <int> (m);
+                        operands.push_back(k);
+                        delete [] k;
+                        break;
+                    }
+                case 5:
+                    {
+                        m = m(n);
+                        Polynom <int> * k = new Polynom <int> (m);
+                        operands.push_back(k);
+                        delete [] k;
+                        break;
+                    }
+                    //default:
+                    //Error: incorrect operation expression.
+                }
+            }
+            i++;
+        }
+        if (operands.size() != 1)
+        {
+            //Error.
+        }
+
         //to do OPZ from tokens.
         //initial is the field already partitioned.
         //just make opz from it and write to opz field.
+        Polynom <int>* m = new Polynom<int>;
+        m = operands.back();
+        return m;
     }
-    void makeEquals(Result& r){};/*
+    Result makeEquals(Result& r)
     {
         int EQ = 0;
         for (int i = 0; i < r.result.size(); ++i)
-            if (r.result[i].a == "=")
+            if (r.result[i]->a == "=")
                 EQ++;
         if (EQ == 0)
-            return;
-        Result R;
-        unsigned int step = 0;
-        for (step; step < r.result.size(); ++step)
         {
-            string NewName;
-            NewName = r.result[step++].a;
-            step++;
-            while (step < r.result.size() && (!(r.result[step].isSeparator())))
-            {
-                R.result.push_back(r.result[step]);
-                ++step;
-            }
-            
-            //Polynom<int> A;
-            // handler.polynoms.setVariable(NewName, A);
+            return r;
         }
+        Result R;
+        unsigned int step = 2;
+        keys.push_back(r.result[0]->a);
+        Polynom<int> A;
+        for (step; step < r.result.size(); ++step)
+            R.result.push_back(r.result[step]);
         //to do
         //add to newNames all equals
         //received from current command    
-    };*/
-    void Solver::init(Result& r)
-    {
+        return R;
+    }
+    Polynom<int> Solver::init(Result& r)
+    { 
         initial = r;
-        makeOPZ(initial);
-        makeEquals(r);
-    };
+        makeOPZ(initial); 
+        return makeOPZ(initial);
+    }
+    bool higherPriority (Token *op1, Token *op2) //priority comparison
+    {
+        const string operations[] = {"_", "+", "-", "*", "#", "^"};
+        int priority[] = {1, 1, 1, 2, 3, 4};
+        int pr1, pr2;
+        for(int i = 0; i < 6; i++)
+        {
+            if(op1->a == operations[i])
+                pr1=priority[i];
+            if(op2->a == operations[i])
+                pr2=priority[i];
+        }
+        return (pr1>pr2);
+    }
 public:
     Map<string, Polynom<int>> getEquals();
     Polynom<int> execute(Result& r)
     {
-        Polynom<int> A;
-        makeOPZ(r);
-        init(r);
-        //executing opz , must return polynom
+        Polynom<int> A = makeOPZ(makeEquals(r));
         return A;
     }
 };

@@ -4,6 +4,7 @@
 #include <vector>
 #include "IOHandler.h"
 #include "Complex.h"
+#include "Polynom.h"
 
 using std::string;
 using std::cin;
@@ -12,30 +13,29 @@ using std::vector;
 using std::getline;
 using std::endl;
 
-int currentStep;
 
 int main()
 {
     IOHandler handler;
-    handler.counter = currentStep;
+    handler.counter = 0;
     string currentCommand;
     
     while (true)
     {
         cout << "In" << "[" << handler.counter << "] > ";
-    
         getline(cin, currentCommand);
-
         if (!currentCommand.compare("exit"))
             break;
         else
         {
-            Polynom<int> response = handler.executeCommand(currentCommand);
-
-            cout << "Out" << "[" << handler.counter << "] > ";
-            cout << response << endl;
+            vector<Polynom<int>> response = handler.executeCommand(currentCommand);
+            for (int i = 0; i < response.size(); ++i)
+            {
+                cout << "Out" << "[" << handler.counter + i << "] > ";
+                cout << response[i] << endl;
+            }
+            handler.counter +=response.size();
         }
     }
-
     return 0;
 }

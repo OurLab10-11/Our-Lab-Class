@@ -8,8 +8,9 @@ using std::iostream;
 class Number
 {
 public:
-    Number(const Number&);
+    Number(const Number&){};
     Number(string s);
+    Number(int s){};
     virtual ~Number();
 
     virtual Number operator+(Number a);

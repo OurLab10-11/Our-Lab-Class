@@ -56,7 +56,7 @@ public:
     Polynom(Numb);
     Polynom(std::string D)
     {
-        for (int i = 1; i < N; i++)
+        for (int i = 1; i < 5; i++)
         {
             coeff[i] = 0;
         }
@@ -81,7 +81,7 @@ public:
     Polynom<Numb> operator*(const Polynom<Numb>&);
     Polynom<Numb> operator/(const Polynom<Numb>&);
     Polynom<Numb> operator%(const Polynom<Numb>&);
-    Polynom<Numb> operator^(int);
+    Polynom<Numb> operator^(const Polynom<Numb>&);
     Polynom<Numb> operator/(Numb a);
 
     Polynom<Numb> operator+=(const Polynom<Numb>&);
@@ -158,7 +158,6 @@ template<class Numb> Polynom<Numb>::Polynom(Numb b)
 
     deg = 0;
 }   ////template<class Numb>  //Polynom<Numb>::Polynom(std::string b)
-   ////template<class Numb>  //Polynom<Numb>::Polynom(std::string b)
 template<class Numb> Numb& Polynom<Numb>::operator[](int i)
 {
     if ((i < 0) || (i >= N))
@@ -306,16 +305,17 @@ template<class Numb> Polynom<Numb> Polynom<Numb>::operator%(const Polynom<Numb>&
 
     return rem;
 }
-template<class Numb> Polynom<Numb> Polynom<Numb>::operator^(int deg)
+template<class Numb> Polynom<Numb> Polynom<Numb>::operator^(const Polynom<Numb>& b)
 {
     Polynom<Numb> temp(*this);
     Polynom<Numb> res(1);
-    while (deg)
+    int n = b.coeff[0];
+    while (n)
     {
-        if(deg & 1)
+        if(n & 1)
             res *= temp;
         temp *= temp;
-        deg >>= 1;
+        n >>= 1;
     }
 
     return res;
@@ -489,15 +489,3 @@ template<class Numb> bool Polynom<Numb>::operator!=(const Polynom<Numb>& b)
 
     return false;
 }
-
-//{
-//    for (int i = 1; i < N; i++)
-//    {
-//        coeff[i] = 0;
-//    }
-//    
-//    coeff[1] = 1;
-//    deg = 1;
-//        
-//}
-

@@ -9,12 +9,20 @@ class Token
 {
 public:
     string a; 
-    virtual bool isOperation()
+    virtual int isOperation()
     {
-        if (a == "+" || a == "-" || a == "*" || a == "^") // "/" cannot be mentioned here. It is used only in Rational, and there's Parser to think about it :)
+        /*if (a == "+" || a == "-" || a == "*" || a == "^") // "/" cannot be mentioned here. It is used only in Rational, and there's Parser to think about it :)
             return true;
         else
-            return false;
+            return false;*/
+        const string operations[] = {"_", "+", "-", "*", "#", "^"};
+        int i;
+        for (i = 0; i < 6; i++)
+            if (a == operations[i])
+                break;
+        if (i > 5)
+            return 0;
+        return i+1;
     }
     virtual bool isPolynom()
     {

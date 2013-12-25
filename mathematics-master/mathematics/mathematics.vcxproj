@@ -87,15 +87,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Complex.cpp" />
-    <ClCompile Include="IOHandler.cpp" />
-    <ClCompile Include="Map.cpp" />
     <ClCompile Include="Mathematics.cpp" />
-    <ClCompile Include="Number.cpp" />
-    <ClCompile Include="Parser.cpp" />
-    <ClCompile Include="Polynom.cpp" />
-    <ClCompile Include="Result.cpp" />
-    <ClCompile Include="Solver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Complex.h" />
@@ -105,6 +97,7 @@
     <ClInclude Include="Operation.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="Polynom.h" />
+    <ClInclude Include="Rational.h" />
     <ClInclude Include="Result.h" />
     <ClInclude Include="Solver.h" />
     <ClInclude Include="Token.h" />

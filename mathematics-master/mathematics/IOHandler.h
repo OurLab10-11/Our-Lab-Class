@@ -63,118 +63,135 @@ public:
         stack <int> a;
         return "";
     }
-    Result command(string temp)
+    vector<Result> command(string temp)
     {
-        Result result;
+        vector<Result> result;
         temp = deleteSpace(temp);
         int length = temp.length();
+        int amountOfSeparator = 0;
+        for (int i = 0; i < temp.length(); ++i)
+            if (isSeparator(temp[i])) 
+                ++amountOfSeparator;
+        result.resize(++amountOfSeparator);
         temp += " ";
         string input = "";
         if (temp[0] == '-')
         {
             input +=temp[0];
         }
+        int j = 0;
         for (int  i = 0; i < length; ++i)
         {
-            if (temp[i] == ' ')
-                break;
-            if (temp[i] == '-'&& i > 0 && (isOperation(temp[i - 1]) || (temp[i - 1]) == '(' || temp[i - 1] == '['))
-            { 
-                input += "-";
-                continue;
-            }
-            if (isOperation(temp[i]) && temp[i + 1] == 'i')
+            while(!isSeparator(temp[i]))
             {
-                input = "";
-                input += temp[i];
-                Operation* O = new Operation(input);
-                result.addToken(O);
-                input = "1";
-                Polynom<int>* A = new Polynom<int>(input);
-                result.addToken(A);
-                input = "";
-                continue;
-            }
+                if (temp[i] == ' ')
+                    break;
+                if (temp[i] == '-'&& i > 0 && (isOperation(temp[i - 1]) || (temp[i - 1]) == '(' || temp[i - 1] == '['))
+                { 
+                    input += "-";
+                    ++i;
+                    continue;
+                }
+                if (isOperation(temp[i]) && temp[i + 1] == 'i')
+                {
+                    input = "";
+                    input += temp[i];
+                    Operation* O = new Operation(input);
+                    result[j].addToken(O);
+                    input = "1";
+                    Polynom<int>* A = new Polynom<int>(input);
+                    result[j].addToken(A);
+                    input = "";
+                    ++i;
+                    continue;
+                }
 
-            if (temp[i] == '.')
-            {
-                input +=temp[i];
-                continue;
+                if (temp[i] == '.')
+                {
+                    input +=temp[i];
+                    ++i;
+                    continue;
+                }
+                if (temp[i] == '[' || temp[i] == ']' || temp[i] == '(' || temp[i] == ')')
+                {
+                    if (isOperation(input[0]) && (1u == input.length()))
+                    {
+                        Operation* O = new Operation(input);
+                        result[j].addToken(O);
+                    }
+                    else
+                    {
+                        Polynom<int>* O = new Polynom<int>(input);
+                        result[j].addToken(O);
+                    }
+                    input = temp[i];
+                    Operation* A = new Operation(input);
+                    result[j].addToken(A);
+                    input = "";
+                    ++i;
+                    continue;
+                }
+
+                if (isOperation(temp[i]))
+                {
+                    input = temp[i];
+                    Operation* O = new Operation(input);
+                    result[j].addToken(O);
+                    input = "";
+                    ++i;
+                    continue;
+                }
+
+                if (isdigit(temp[i]))
+                {
+                    input += temp[i];
+                    if (!isdigit(temp[i + 1]) && temp[i + 1] != '.')
+                    {
+                        Polynom<int>* O = new Polynom<int>(input);
+                        result[j].addToken(O);
+                        input = "";
+                        ++i;
+                        continue;
+                    }
+                    else
+                    {
+                        input +=temp[i + 1];
+                        i = i + 1;
+                        ++i;
+                        continue;
+                    }
+                }   
+                if (isalpha(temp[i]))
+                {
+                    input += temp[i];
+                    ++i;
+                    if (!isalpha(temp[i]))
+                    {
+                        Operation* O = new Operation(input);
+                        result[j].addToken(O);
+                        input = "";
+                        continue;
+                    }
+                }
             }
-            if (temp[i] == '[' || temp[i] == ']' || temp[i] == '(' || temp[i] == ')')
+            if (input != "")
             {
                 if (isOperation(input[0]) && (1u == input.length()))
                 {
                     Operation* O = new Operation(input);
-                    result.addToken(O);
+                    result[j].addToken(O);
                 }
                 else
                 {
                     Polynom<int>* O = new Polynom<int>(input);
-                    result.addToken(O);
-                }
-                input = temp[i];
-                Operation* A = new Operation(input);
-                result.addToken(A);
-                input = "";
-                continue;
-            }
-
-            if (isOperation(temp[i]))
-            {
-                input = temp[i];
-                Operation* O = new Operation(input);
-                result.addToken(O);
-                input = "";
-                continue;
-            }
-
-            if (isdigit(temp[i]))
-            {
-                input += temp[i];
-                if (!isdigit(temp[i + 1]) && temp[i + 1] != '.')
-                {
-                    Polynom<int>* O = new Polynom<int>(input);
-                    result.addToken(O);
-                    input = "";
-                    continue;
-                }
-                else
-                {
-                    input +=temp[i + 1];
-                    i = i + 1;
-                    continue;
-                }
-            }   
-            if (isalpha(temp[i]))
-            {
-                input += temp[i];
-                if (!isalpha(temp[i + 1]))
-                {
-                    Operation* O = new Operation(input);
-                    result.addToken(O);
-                    input = "";
-                    continue;
+                    result[j].addToken(O);
                 }
             }
+            ++j;
         }
-        if (input != "")
-        {
-            if (isOperation(input[0]) && (1u == input.length()))
-            {
-                Operation* O = new Operation(input);
-                result.addToken(O);
-            }
-            else
-            {
-                Polynom<int>* O = new Polynom<int>(input);
-                    result.addToken(O);
-            }
-
-        }
-
         return result;
-    };
+
+    }
     string deleteSpace(string temp)
     {
         Result result;
@@ -193,14 +210,17 @@ public:
                 }
             }
         }
-        for (int position = 0; position < length; ++position)
+        for (int position = 0; position < length - 1; ++position)
         {
-            if ((isalpha(temp[position + 1]) && (isdigit(temp[position]) || isBraket(temp[position]))) || (isalpha(temp[position]) && isdigit(temp[position + 1])))
+            if (temp[position + 1] == '(')
             {
-                temp.insert(position + 1,"*");
-                ++length;
+                if (temp[position] != '+' && temp[position] != '-' && temp[position] != '^' && temp[position] != '*' && temp[position] != '/')
+                {
+                    temp.insert(position + 1,"#");
+                    ++length;
+                    ++position;
+                }
             }
-
         }
         return temp;
     }
@@ -223,16 +243,19 @@ public:
     {
         return counter;
     }
-    Polynom<int> executeCommand(string command)
+    vector<Polynom<int>> executeCommand(string command)
     {
-        ++counter;
-        Result response = parser.command(command);
-        Polynom<int> result = solver.execute(response);
-        previousResults.push_back(result);
+        vector<Result> response = parser.command(command);
+        vector<Polynom<int>> Poly;
+        for (int size = 0; size < response.size(); ++size)
+        {
+            Poly.push_back(solver.execute(response[size]));
+            previousResults.push_back(Poly[size]);
+        }
         //to do
         //adding newNames if non-empty.
         //
-        return result;
+        return Poly;
     }
     //2 methods for solver.
     Polynom<int> getVariable(string variableName)

@@ -1,41 +1,33 @@
-﻿Build started 25.12.2013 17:37:45.
+﻿Build started 26.12.2013 2:12:48.
      1>Project "C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\mathematics\mathematics.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Complex.cpp Mathematics.cpp
-         Complex.cpp
-         Generating Code...
-         Compiling...
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Mathematics.cpp
          Mathematics.cpp
+     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(131): warning C4808: case '2' is not a valid value for switch condition of type 'bool'
+     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(131): warning C4808: case '3' is not a valid value for switch condition of type 'bool'
+     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(131): warning C4808: case '4' is not a valid value for switch condition of type 'bool'
+     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(131): warning C4808: case '5' is not a valid value for switch condition of type 'bool'
      1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\polynom.h(63): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
                  c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\polynom.h(57) : while compiling class template member function 'Polynom<Numb>::Polynom(std::string)'
                  with
                  [
                      Numb=int
                  ]
-                 c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\iohandler.h(93) : see reference to function template instantiation 'Polynom<Numb>::Polynom(std::string)' being compiled
+                 c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(84) : see reference to function template instantiation 'Polynom<Numb>::Polynom(std::string)' being compiled
                  with
                  [
                      Numb=int
                  ]
-                 c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(125) : see reference to class template instantiation 'Polynom<Numb>' being compiled
+                 c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(23) : see reference to class template instantiation 'Polynom<Numb>' being compiled
                  with
                  [
                      Numb=int
                  ]
-         Generating Code...
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\Debug\mathematics.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\Debug\mathematics.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\Debug\mathematics.lib" /MACHINE:X86 /SAFESEH Debug\Complex.obj
-         Debug\IOHandler.obj
-         Debug\Map.obj
-         Debug\Mathematics.obj
-         Debug\Number.obj
-         Debug\Parser.obj
-         Debug\Polynom.obj
-         Debug\Result.obj
-         Debug\Solver.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\Debug\mathematics.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\Debug\mathematics.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\Debug\mathematics.lib" /MACHINE:X86 /SAFESEH Debug\Mathematics.obj
          mathematics.vcxproj -> C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\Debug\mathematics.exe
      1>Done Building Project "C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\mathematics\mathematics.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:05.26
+Time Elapsed 00:00:03.36
