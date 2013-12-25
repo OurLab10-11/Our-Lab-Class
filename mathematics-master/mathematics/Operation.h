@@ -13,18 +13,7 @@ public:
     Operation();
     Operation(const string b)
     {
-        if (b == "+")
-            operatoring = "+";
-        if (b == "-")
-            operatoring = "-";
-        if (b == "*")
-            operatoring = "*";
-        if (b == "/")
-            operatoring = "/";
-        if (b == "^")
-            operatoring = "^";
-        if (b == "=")
-            operatoring = "=";
+        a = b;
     }
     bool isOpenBracket(Token)
     {

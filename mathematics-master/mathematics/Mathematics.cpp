@@ -13,16 +13,15 @@ using std::endl;
 
 int currentStep;
 
-
 int main()
 {
     IOHandler handler;
-
+    handler.counter = currentStep;
     string currentCommand;
     
     while (true)
     {
-        cout << "In" << "[" << currentStep << "] > ";
+        cout << "In" << "[" << handler.counter << "] > ";
 
         getline(cin, currentCommand);
 
@@ -30,9 +29,9 @@ int main()
             break;
         else
         {
-            string response = handler.executeCommand(currentCommand);
+            Polynom<int> response = handler.executeCommand(currentCommand);
 
-            cout << "Out" << "[" << currentStep++ << "] > ";
+            cout << "Out" << "[" << handler.counter << "] > ";
             cout << response << endl;
         }
     }

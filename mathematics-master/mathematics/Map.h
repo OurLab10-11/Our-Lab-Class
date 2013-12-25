@@ -3,7 +3,6 @@
 #include <string>
 #include <iostream>
 #include "Number.h"
-//template<class Key, class Value>
 
 using std::string;
 using std::iostream;
@@ -13,7 +12,7 @@ template<class KEY, class VALUE>
 class Map
 {
 private:
-    vector<string> map[2];
+    vector<KEY> map[2];
 public:
     void setVariable(KEY T1, VALUE T2)
     {

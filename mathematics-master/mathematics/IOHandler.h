@@ -14,11 +14,15 @@ using std::stack;
 
 class Parser
 {
-private://IOHandler parent;     // to extract some variables from parent.
+private:
+    //IOHandler parent;
+    // to extract some variables from parent.
     // use getVariables or getPreviousResult in makeOPZ methods
     // change [i] to getPreviousResult and <varName> to getVariable(varName)    
-public://Parser();
-    //Parser(IOHandler& h);
+public:
+    //Parser(IOHandler& h){};
+    Parser()
+    {};
     bool isOperation(char a)
     {
         if (a == '-' || a == '+' || a == '=' || a == '*' || a == '/' || a == '^')
@@ -62,7 +66,6 @@ public://Parser();
     Result command(string temp)
     {
         Result result;
-        
         temp = deleteSpace(temp);
         int length = temp.length();
         temp += " ";
@@ -75,14 +78,15 @@ public://Parser();
         {
             if (temp[i] == ' ')
                 break;
-            if (temp[i] == '-'&& i > 0 && (isOperation(temp[i - 1]) || isBraket(temp[i - 1])))
+            if (temp[i] == '-'&& i > 0 && (isOperation(temp[i - 1]) || (temp[i - 1]) == '(' || temp[i - 1] == '['))
             { 
                 input += "-";
                 continue;
             }
             if (isOperation(temp[i]) && temp[i + 1] == 'i')
             {
-                input = temp[i];
+                input = "";
+                input += temp[i];
                 Operation A(input);
                 result.addToken(A);
                 input = "1";
@@ -99,7 +103,6 @@ public://Parser();
             }
             if (temp[i] == '[' || temp[i] == ']' || temp[i] == '(' || temp[i] == ')')
             {
-                input = temp[i];
                 if (isOperation(input[0]) && (1u == input.length()))
                 {
                     Operation A(input);
@@ -110,6 +113,9 @@ public://Parser();
                     Polynom<int> A(input);
                     result.addToken(A);
                 }
+                input = temp[i];
+                Operation A(input);
+                result.addToken(A);
                 input = "";
                 continue;
             }
@@ -145,7 +151,7 @@ public://Parser();
                 input += temp[i];
                 if (!isalpha(temp[i + 1]))
                 {
-                    Polynom<int> A(input);
+                    Operation A(input);
                     result.addToken(A);
                     input = "";
                     continue;
@@ -166,7 +172,7 @@ public://Parser();
             }
 
         }
-        
+
         return result;
     };
     string deleteSpace(string temp)
@@ -189,7 +195,7 @@ public://Parser();
         }
         for (int position = 0; position < length; ++position)
         {
-            if ((isalpha(temp[position + 1]) && isdigit(temp[position])) || (isalpha(temp[position]) && isdigit(temp[position + 1])))
+            if ((isalpha(temp[position + 1]) && (isdigit(temp[position]) || isBraket(temp[position]))) || (isalpha(temp[position]) && isdigit(temp[position + 1])))
             {
                 temp.insert(position + 1,"*");
                 ++length;
@@ -205,26 +211,28 @@ class IOHandler
 private:
     Parser parser;
     Solver solver;
+public:
     Map<string, Polynom<int>> polynoms; //  variables
     vector<Polynom<int>> previousResults; // to support previous polynoms calls.
-public:
-    //IOHandler();
+    IOHandler()
+    {
+    };
     int counter;
     int getCurrentStep()
     {
         return counter;
     }
-    string executeCommand(string command)
+    Polynom<int> executeCommand(string command)
     {
         ++counter;
         Result response = parser.command(command);
-        string result = solver.execute(response);
+        Polynom<int> result = solver.execute(response);
+        previousResults.push_back(result);
         //to do
         //adding newNames if non-empty.
         //
         return result;
     }
-
     //2 methods for solver.
     Polynom<int> getVariable(string variableName)
     {
@@ -232,7 +240,7 @@ public:
         //extracting from the map value of variableName
         //must throws exception if variable with this name does not exist.
         //return map.get(variableName);
-        
+
     }
     Polynom<int> getPreviousResult(int Number)
     {
