@@ -8,8 +8,8 @@ using std::vector;
 class Result
 {
 public:
-    vector<Token> result;
-    void addToken(Token t)
+    vector<Token*> result;
+    void addToken(Token *t)
     {
         result.push_back(t);
     }

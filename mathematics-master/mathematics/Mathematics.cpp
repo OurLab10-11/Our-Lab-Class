@@ -1,3 +1,4 @@
+#pragma warning (disable: 4018)
 #include <iostream>
 #include <string>
 #include <vector>
@@ -22,7 +23,7 @@ int main()
     while (true)
     {
         cout << "In" << "[" << handler.counter << "] > ";
-
+    
         getline(cin, currentCommand);
 
         if (!currentCommand.compare("exit"))

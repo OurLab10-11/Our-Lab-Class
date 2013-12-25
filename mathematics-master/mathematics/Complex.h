@@ -100,12 +100,12 @@ public:
         return temp1;
     };
 
-    bool operator != (const Complex& temp)
+    bool operator != (int& temp)
     {
-        if (this->re == temp.re && this->im == temp.im)
-            return false;
-        esle
+        if (!this->re == temp && !this->im == 0)
             return true;
+        else
+            return false;
     };
     bool operator == (const Complex& temp)
     {

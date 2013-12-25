@@ -60,8 +60,7 @@ public:
         {
             coeff[i] = 0;
         }
-        coeff[0] = 1;
-        coeff[1] = 1;
+        coeff[0] = stod(D);
     }
     int& getDeg();
     Numb& getValue(const Numb& x);
@@ -95,8 +94,6 @@ public:
 
     bool operator==(const Polynom<Numb>&);
     bool operator!=(const Polynom<Numb>&);
-
-
 };
 #endif
 template<class Numb> std::ostream& operator<<(std::ostream& os, Polynom<Numb> a)

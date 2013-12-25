@@ -87,11 +87,11 @@ public:
             {
                 input = "";
                 input += temp[i];
-                Operation A(input);
-                result.addToken(A);
+                Operation* O = new Operation(input);
+                result.addToken(O);
                 input = "1";
-                Polynom<int> B(input);
-                result.addToken(B);
+                Polynom<int>* A = new Polynom<int>(input);
+                result.addToken(A);
                 input = "";
                 continue;
             }
@@ -105,16 +105,16 @@ public:
             {
                 if (isOperation(input[0]) && (1u == input.length()))
                 {
-                    Operation A(input);
-                    result.addToken(A);
+                    Operation* O = new Operation(input);
+                    result.addToken(O);
                 }
                 else
                 {
-                    Polynom<int> A(input);
-                    result.addToken(A);
+                    Polynom<int>* O = new Polynom<int>(input);
+                    result.addToken(O);
                 }
                 input = temp[i];
-                Operation A(input);
+                Operation* A = new Operation(input);
                 result.addToken(A);
                 input = "";
                 continue;
@@ -123,8 +123,8 @@ public:
             if (isOperation(temp[i]))
             {
                 input = temp[i];
-                Operation A(input);
-                result.addToken(A);
+                Operation* O = new Operation(input);
+                result.addToken(O);
                 input = "";
                 continue;
             }
@@ -134,8 +134,8 @@ public:
                 input += temp[i];
                 if (!isdigit(temp[i + 1]) && temp[i + 1] != '.')
                 {
-                    Polynom<int> A(input);
-                    result.addToken(A);
+                    Polynom<int>* O = new Polynom<int>(input);
+                    result.addToken(O);
                     input = "";
                     continue;
                 }
@@ -151,8 +151,8 @@ public:
                 input += temp[i];
                 if (!isalpha(temp[i + 1]))
                 {
-                    Operation A(input);
-                    result.addToken(A);
+                    Operation* O = new Operation(input);
+                    result.addToken(O);
                     input = "";
                     continue;
                 }
@@ -162,13 +162,13 @@ public:
         {
             if (isOperation(input[0]) && (1u == input.length()))
             {
-                Operation A(input);
-                result.addToken(A);
+                Operation* O = new Operation(input);
+                result.addToken(O);
             }
             else
             {
-                Polynom<int> A(input);
-                result.addToken(A);
+                Polynom<int>* O = new Polynom<int>(input);
+                    result.addToken(O);
             }
 
         }
@@ -209,9 +209,10 @@ public:
 class IOHandler
 {
 private:
-    Parser parser;
-    Solver solver;
 public:
+    Solver solver;
+    Parser parser;
+
     Map<string, Polynom<int>> polynoms; //  variables
     vector<Polynom<int>> previousResults; // to support previous polynoms calls.
     IOHandler()

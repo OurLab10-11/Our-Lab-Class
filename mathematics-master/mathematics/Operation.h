@@ -15,20 +15,6 @@ public:
     {
         a = b;
     }
-    bool isOpenBracket(Token)
-    {
-        if (this->operatoring == "[" || this->operatoring == "(")
-            return true;
-        else
-            return false;
-    }
-    bool isCloseBracket(Token)
-    {
-        if (this->operatoring == "]" || this->operatoring == ")")
-            return true;
-        else
-            return false;
-    }
 };
 
 

@@ -1,41 +1,41 @@
-﻿Build started 25.12.2013 15:20:46.
+﻿Build started 25.12.2013 17:37:45.
      1>Project "C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\mathematics\mathematics.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt IOHandler.cpp Mathematics.cpp Solver.cpp
-         IOHandler.cpp
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(91): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(110): error C2065: 'IOHandler' : undeclared identifier
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(110): error C2146: syntax error : missing ';' before identifier 'B'
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(110): error C2065: 'B' : undeclared identifier
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(111): error C2065: 'B' : undeclared identifier
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(111): error C2228: left of '.polynoms' must have class/struct/union
-                 type is ''unknown-type''
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(111): error C2228: left of '.setVariable' must have class/struct/union
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Complex.cpp Mathematics.cpp
+         Complex.cpp
          Generating Code...
          Compiling...
          Mathematics.cpp
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(91): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(110): error C2065: 'IOHandler' : undeclared identifier
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(110): error C2146: syntax error : missing ';' before identifier 'B'
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(110): error C2065: 'B' : undeclared identifier
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(111): error C2065: 'B' : undeclared identifier
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(111): error C2228: left of '.polynoms' must have class/struct/union
-                 type is ''unknown-type''
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(111): error C2228: left of '.setVariable' must have class/struct/union
+     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\polynom.h(63): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+                 c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\polynom.h(57) : while compiling class template member function 'Polynom<Numb>::Polynom(std::string)'
+                 with
+                 [
+                     Numb=int
+                 ]
+                 c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\iohandler.h(93) : see reference to function template instantiation 'Polynom<Numb>::Polynom(std::string)' being compiled
+                 with
+                 [
+                     Numb=int
+                 ]
+                 c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(125) : see reference to class template instantiation 'Polynom<Numb>' being compiled
+                 with
+                 [
+                     Numb=int
+                 ]
          Generating Code...
-         Compiling...
-         Solver.cpp
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(91): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(110): error C2065: 'IOHandler' : undeclared identifier
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(110): error C2146: syntax error : missing ';' before identifier 'B'
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(110): error C2065: 'B' : undeclared identifier
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(111): error C2065: 'B' : undeclared identifier
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(111): error C2228: left of '.polynoms' must have class/struct/union
-                 type is ''unknown-type''
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(111): error C2228: left of '.setVariable' must have class/struct/union
-         Generating Code...
-     1>Done Building Project "C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\mathematics\mathematics.vcxproj" (Build target(s)) -- FAILED.
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\Debug\mathematics.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\Debug\mathematics.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\Debug\mathematics.lib" /MACHINE:X86 /SAFESEH Debug\Complex.obj
+         Debug\IOHandler.obj
+         Debug\Map.obj
+         Debug\Mathematics.obj
+         Debug\Number.obj
+         Debug\Parser.obj
+         Debug\Polynom.obj
+         Debug\Result.obj
+         Debug\Solver.obj
+         mathematics.vcxproj -> C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\Debug\mathematics.exe
+     1>Done Building Project "C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\mathematics\mathematics.vcxproj" (Build target(s)).
 
-Build FAILED.
+Build succeeded.
 
-Time Elapsed 00:00:03.88
+Time Elapsed 00:00:05.26
