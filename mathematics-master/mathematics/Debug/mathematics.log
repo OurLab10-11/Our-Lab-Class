@@ -1,12 +1,12 @@
-﻿Build started 26.12.2013 6:33:27.
+﻿Build started 26.12.2013 10:25:48.
      1>Project "C:\Users\Owner\Documents\Visual Studio 2012\Projects\mathematics-master\mathematics\mathematics.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt Mathematics.cpp
          Mathematics.cpp
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(94): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(168): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(95): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\solver.h(175): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\iohandler.h(69): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\iohandler.h(238): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\iohandler.h(267): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\mathematics.cpp(28): warning C4018: '<' : signed/unsigned mismatch
      1>c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\polynom.h(72): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
                  c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\polynom.h(59) : while compiling class template member function 'Polynom<Numb>::Polynom(std::string)'
@@ -14,7 +14,7 @@
                  [
                      Numb=int
                  ]
-                 c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\iohandler.h(100) : see reference to function template instantiation 'Polynom<Numb>::Polynom(std::string)' being compiled
+                 c:\users\owner\documents\visual studio 2012\projects\mathematics-master\mathematics\iohandler.h(101) : see reference to function template instantiation 'Polynom<Numb>::Polynom(std::string)' being compiled
                  with
                  [
                      Numb=int
@@ -31,4 +31,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.27
+Time Elapsed 00:00:03.12

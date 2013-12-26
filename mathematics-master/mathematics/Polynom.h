@@ -112,7 +112,7 @@ template<class Numb> std::ostream& operator<<(std::ostream& os, Polynom<Numb> a)
 {
     if (a.deg == 0)
     {
-        os <<  a.a[0];
+        os <<  a.coeff[0];
         return os;
     }
     if (a.deg == 1)
@@ -144,7 +144,7 @@ template<class Numb> std::ostream& operator<<(std::ostream& os, Polynom<Numb> a)
             if (a.coeff[a.deg] == - 1)
                 os << "-x^"<< a.deg;
             else
-                os << a.coeff[1] << "x^" << a.deg;
+                os << a.coeff[a.deg] << "x^" << a.deg;
         }
         for (int i = a.deg - 1; i >= 2; --i)
         {

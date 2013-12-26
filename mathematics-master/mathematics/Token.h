@@ -15,12 +15,12 @@ public:
             return true;
         else
             return false;*/
-        const string operations[] = {"_", "+", "-", "*", "#", "^"};
+        const string operations[] = {"_", "+", "-", "*", "#", "^" , "$"};
         int i;
-        for (i = 0; i < 6; i++)
+        for (i = 0; i < 7; i++)
             if (a == operations[i])
                 break;
-        if (i > 5)
+        if (i > 6)
             return 0;
         return i;
     }

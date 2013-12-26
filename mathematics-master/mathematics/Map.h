@@ -12,22 +12,25 @@ template<class KEY, class VALUE>
 class Map
 {
 private:
-    vector<KEY> map[2];
+    vector<KEY> keys;
+    vector<VALUE> values;
 public:
     void setVariable(KEY T1, VALUE T2)
     {
-        map[0].push_back(T1);
-        map[1].push_back(T2);
+        keys.push_back(T1);
+        values.push_back(T2);
     };
     VALUE getVariable(KEY A)
     {
         int i = 0;
-        while (i != map[0].size())
+        while (i != keys.size())
         {
-            if (map[0][i] == A) return map[1][i];
-            else ++i;
+            if (keys[i] == A) 
+                return values[i];
+            else
+                ++i;
         }
-
+        return "0";
     }
 };
 

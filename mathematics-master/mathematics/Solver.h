@@ -31,7 +31,7 @@ private:
             if(op2->a == operations[i])
                 pr2=priority[i];
         }
-        return (pr1>pr2);
+        return (pr1>=pr2);
     }
     Polynom<int> makeOPZ(Result& temp)
     {
@@ -47,6 +47,14 @@ private:
             }
             if (temp.result[i]->isOpenBracket())
             {
+                if (temp.result[i]->a == "[")
+                {
+                    temp.result[i]->a = "$";
+                    vect.push_back(temp.result[i]);
+                    vect.push_back(temp.result[++i]);
+                    ++i;
+                    continue;
+                }
                 stak.push(temp.result[i]);
                 continue;
             }
@@ -59,7 +67,7 @@ private:
                 }
                 if (stak.empty())
                 {
-                    cout << "ERROR";//Error: not enough of opening brackets.
+                    return 0;//Error: not enough of opening brackets.
                 }
                 //if (stak.top().isOpenBracket != temp.result[i].isCloseBracket()) //bracket's mismatch checking. If needed.
                 //error handler here
@@ -68,13 +76,6 @@ private:
             }
             if (temp.result[i]->isOperation())
             {
-
-                if ((temp.result[i]->a == "-" && !i) || (temp.result[i]->a == "-" && temp.result[i]->isOpenBracket())) //unary minus
-                {
-                    temp.result[i]->a = "_";
-                    //ATTENTION! Changing temp here!
-                    // And using "_" to designate the unary minus.
-                }
                 while (!stak.empty() && !stak.top()->isOpenBracket() && higherPriority(stak.top(), temp.result[i]))
                 {
                     vect.push_back(stak.top());
@@ -144,6 +145,12 @@ private:
                         operands.push_back(k);
                         break;
                     }
+                /*case 6:
+                    {                       
+                        Polynom <int> * k = new Polynom <int> (*);
+                        operands.push_back(k);
+                        break;
+                    }*/
                     //default:
                     //Error: incorrect operation expression.
                 }
@@ -183,17 +190,15 @@ private:
         //received from current command    
         return R;
     }
-    Polynom<int> Solver::init(Result& r)
-    { 
-        initial = r;
-        makeOPZ(initial); 
-        return makeOPZ(initial);
-    }
 public:
     Map<string, Polynom<int>> getEquals();
     Polynom<int> execute(Result& r)
     {
         Polynom<int> A = makeOPZ(makeEquals(r));
+        values.push_back(A);
+        if (keys.size() < values.size())
+            keys.push_back("");
+        newNames.setVariable(keys.back(), values.back());
         return A;
     }
 };

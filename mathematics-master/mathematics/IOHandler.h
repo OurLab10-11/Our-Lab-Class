@@ -75,7 +75,8 @@ public:
         string input = "";
         if (temp[0] == '-')
         {
-            input +=temp[0];
+            input += '-';
+            temp.erase(0,1);
         }
         int j = 0;
         for (int  i = 0; i < length; ++i)
@@ -84,7 +85,7 @@ public:
             {
                 if (temp[i] == ' ')
                     break;
-                if (temp[i] == '-'&& i > 0 && (isOperation(temp[i - 1]) || (temp[i - 1]) == '(' || temp[i - 1] == '['))
+                if (temp[i] == '-'&& i > 0 && ((isOperation(temp[i - 1]) || (temp[i - 1]) == '(' || temp[i - 1] == '[')))
                 { 
                     input += "-";
                     ++i;
@@ -112,7 +113,12 @@ public:
                 }
                 if (temp[i] == '[' || temp[i] == ']' || temp[i] == '(' || temp[i] == ')')
                 {
-                    input += temp[i];
+                    if (input != "")
+                    {
+                        Polynom<int>*A = new Polynom<int>(input);
+                        result[j].addToken(A);
+                    }
+                    input = temp[i];
                     Operation* O = new Operation(input);
                     result[j].addToken(O);
                     input = "";
@@ -122,6 +128,11 @@ public:
 
                 if (isOperation(temp[i]))
                 {
+                    if (input != "")
+                    {
+                        Polynom<int>* A = new Polynom <int>(input);
+                        result[j].addToken(A);
+                    }
                     input = temp[i];
                     Operation* O = new Operation(input);
                     result[j].addToken(O);
@@ -196,6 +207,24 @@ public:
                     position--;
                     length--;
                 }
+            }
+        }
+
+        for (int position = 0; position < length - 1; ++position)
+        {
+            if (isalpha(temp[position + 1]) && isdigit(temp[position]))
+            {
+                temp.insert(position + 1,"*");
+                ++length;
+                ++position;
+                continue;
+            }
+            if (isalpha(temp[position]) && isdigit(temp[position + 1]))
+            {
+                temp.insert(position + 1,"*");
+                ++length;
+                ++position;
+                continue;
             }
         }
         for (int position = 0; position < length - 1; ++position)
