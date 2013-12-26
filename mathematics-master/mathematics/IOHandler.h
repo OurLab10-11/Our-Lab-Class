@@ -71,6 +71,7 @@ public:
                 ++amountOfSeparator;
         result.resize(++amountOfSeparator);
         temp += " ";
+
         string input = "";
         if (temp[0] == '-')
         {
@@ -154,7 +155,7 @@ public:
                     ++i;
                     if (!isalpha(temp[i]))
                     {
-                        Operation* O = new Operation(input);
+                        Polynom<int>* O = new Polynom<int>(input);
                         result[j].addToken(O);
                         input = "";
                         continue;

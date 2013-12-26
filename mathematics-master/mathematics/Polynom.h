@@ -41,6 +41,8 @@
 #ifndef __Test__Polinomials__
 #define __Test__Polinomials__
 
+using namespace std;
+
 template<class Numb>
 class Polynom : public Token
 {
@@ -56,12 +58,21 @@ public:
     Polynom(Numb);
     Polynom(std::string D)
     {
-        for (int i = 1; i < N; i++)
+        for (int i = 0; i < N; ++i)
         {
             coeff[i] = 0;
         }
-        coeff[0] = stod(D);
-        deg = 0;
+        if(D =="x")
+        {
+            coeff[1] = 1;
+            deg = 1;
+        }
+        else
+        {
+            coeff[0] = stod(D);
+            deg = 0;
+        }
+           
     }
     int& getDeg();
     Numb& getValue(const Numb& x);
@@ -99,7 +110,77 @@ public:
 #endif
 template<class Numb> std::ostream& operator<<(std::ostream& os, Polynom<Numb> a)
 {
-    if(a.deg == 0)
+    if (a.deg == 0)
+    {
+        os <<  a.a[0];
+        return os;
+    }
+    if (a.deg == 1)
+    {
+        if (a.coeff[1] == 1)
+            os << "x";
+        else
+        {
+            if (a.coeff[1] == - 1)
+                os << "-x";
+            else
+                os << a.coeff[1] << "x";
+        }
+        if (a.coeff[0] != 0)
+        {
+            if (a.coeff[0] > 0)
+                os << "+" << a.coeff[0];
+            else
+                os << a.coeff[0];
+        }
+        return os;
+    }
+    if (a.deg > 1)
+    {
+        if (a.coeff[a.deg] == 1)
+            os << "x^" << a.deg;
+        else
+        {
+            if (a.coeff[a.deg] == - 1)
+                os << "-x^"<< a.deg;
+            else
+                os << a.coeff[1] << "x^" << a.deg;
+        }
+        for (int i = a.deg - 1; i >= 2; --i)
+        {
+            if (a.coeff[i] != 0)
+            {
+                if (a.coeff[i] > 0)
+                    os << "+" << a.coeff[i] << "x^" << i;
+                else
+                    os << a.coeff[i] << "x^" << i;
+            }
+        }
+        if (a.coeff[1] == 1)
+            os << "+x";
+        else
+        {
+            if (a.coeff[1] == -1)
+                os << "-x";
+            else
+                if (a.coeff[1] > 0)
+                    os << "+"<<a.coeff[1] << "x";
+                else
+                    if (a.coeff[1] < 0)
+                        os << a.coeff[1] << "x";
+        }
+        if (a.coeff[0] != 0)
+        {
+            if (a.coeff[0] > 0)
+                os << "+" << a.coeff[0];
+            else
+                os << a.coeff[0];
+        }
+    }
+
+
+
+    /*if(a.deg == 0)
     {
         os << a[0];
         return os;
@@ -117,7 +198,7 @@ template<class Numb> std::ostream& operator<<(std::ostream& os, Polynom<Numb> a)
     if (a.deg > 0 && a[0] != 0)
         os << "+" << "(" << a[0] << ")";
 
-
+        */
     return os;
 }
 template<class Numb> std::istream& operator>>(std::istream& is, Polynom<Numb>& a)
@@ -240,7 +321,7 @@ template<class Numb> Polynom<Numb> Polynom<Numb>::operator-(const Polynom<Numb>&
 }
 template<class Numb> Polynom<Numb> Polynom<Numb>::operator*(const Polynom<Numb>& b)
 {
-    Polynom c;
+    Polynom<Numb> c;
     if (!(((coeff[0] == 0) && deg == 0) || ((b.coeff[0] == 0) && (b.deg == 0))))
     {
         for (int i = 0; i <= deg; i++)

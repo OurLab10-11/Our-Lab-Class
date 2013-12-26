@@ -59,7 +59,7 @@ private:
                 }
                 if (stak.empty())
                 {
-                    //Error: not enough of opening brackets.
+                    cout << "ERROR";//Error: not enough of opening brackets.
                 }
                 //if (stak.top().isOpenBracket != temp.result[i].isCloseBracket()) //bracket's mismatch checking. If needed.
                 //error handler here
