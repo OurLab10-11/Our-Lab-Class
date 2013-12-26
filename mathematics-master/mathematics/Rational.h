@@ -15,7 +15,6 @@ public:
     double getDouble();
     
 	Rational operator=(const Rational&);
-    
 	Rational operator+(const Rational&);
 	Rational operator-(const Rational&);
 	Rational operator/(const Rational&);

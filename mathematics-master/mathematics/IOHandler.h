@@ -8,9 +8,7 @@
 #include "Operation.h"
 #include "Map.h"
 
-using std::string;
-using std::iostream;
-using std::stack;
+using namespace std;
 
 class Parser
 {
@@ -20,12 +18,11 @@ private:
     // use getVariables or getPreviousResult in makeOPZ methods
     // change [i] to getPreviousResult and <varName> to getVariable(varName)    
 public:
-    //Parser(IOHandler& h){};
     Parser()
     {};
     bool isOperation(char a)
     {
-        if (a == '-' || a == '+' || a == '=' || a == '*' || a == '/' || a == '^')
+        if (a == '-' || a == '+' || a == '=' || a == '*' || a == '/' || a == '^' || a == '#' ||  a == '%')
             return true;
         else
             return false;
@@ -114,19 +111,9 @@ public:
                 }
                 if (temp[i] == '[' || temp[i] == ']' || temp[i] == '(' || temp[i] == ')')
                 {
-                    if (isOperation(input[0]) && (1u == input.length()))
-                    {
-                        Operation* O = new Operation(input);
-                        result[j].addToken(O);
-                    }
-                    else
-                    {
-                        Polynom<int>* O = new Polynom<int>(input);
-                        result[j].addToken(O);
-                    }
-                    input = temp[i];
-                    Operation* A = new Operation(input);
-                    result[j].addToken(A);
+                    input += temp[i];
+                    Operation* O = new Operation(input);
+                    result[j].addToken(O);
                     input = "";
                     ++i;
                     continue;
@@ -229,16 +216,16 @@ public:
 class IOHandler
 {
 private:
-public:
     Solver solver;
     Parser parser;
-
+public:
     Map<string, Polynom<int>> polynoms; //  variables
     vector<Polynom<int>> previousResults; // to support previous polynoms calls.
+    int counter;
     IOHandler()
     {
-    };
-    int counter;
+        counter = 0;
+    }
     int getCurrentStep()
     {
         return counter;
@@ -273,9 +260,3 @@ public:
         return previousResults[Number];
     }
 };
-
-
-
-
-
-

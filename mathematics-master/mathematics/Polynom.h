@@ -56,11 +56,12 @@ public:
     Polynom(Numb);
     Polynom(std::string D)
     {
-        for (int i = 1; i < 5; i++)
+        for (int i = 1; i < N; i++)
         {
             coeff[i] = 0;
         }
         coeff[0] = stod(D);
+        deg = 0;
     }
     int& getDeg();
     Numb& getValue(const Numb& x);
@@ -439,7 +440,6 @@ template<class Numb> Polynom<Numb> Polynom<Numb>::operator()(const Polynom<Numb>
     Polynom<Numb> b1 = b;
     for (int i = 0; i <= this->deg; i++)
         temp += (b1^i) * (this->coeff[i]);
-
     return temp;
 }
 template<class Numb> Polynom<Numb> Polynom<Numb>::operator/(Numb a)

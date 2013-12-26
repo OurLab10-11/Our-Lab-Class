@@ -22,11 +22,11 @@ public:
                 break;
         if (i > 5)
             return 0;
-        return i+1;
+        return i;
     }
     virtual bool isPolynom()
     {
-        if (!this->isOperation() && !this->isSeparator())
+        if (!isOpenBracket() && !isCloseBracket() && !isOperation())
             return true;
         else
             return false;

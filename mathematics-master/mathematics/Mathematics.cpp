@@ -1,4 +1,3 @@
-#pragma warning (disable: 4018)
 #include <iostream>
 #include <string>
 #include <vector>
@@ -13,13 +12,10 @@ using std::vector;
 using std::getline;
 using std::endl;
 
-
 int main()
 {
     IOHandler handler;
-    handler.counter = 0;
     string currentCommand;
-    
     while (true)
     {
         cout << "In" << "[" << handler.counter << "] > ";

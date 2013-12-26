@@ -19,6 +19,20 @@ private:
     vector<string> keys;
     vector<Polynom<int>> values;
     Map<string, Polynom<int>> newNames;
+    bool higherPriority (Token *op1, Token *op2) //priority comparison
+    {
+        const string operations[] = {"_", "+", "-", "*", "#", "^"};
+        int priority[] = {1, 1, 1, 2, 3, 4};
+        int pr1, pr2;
+        for(int i = 0; i < 6; i++)
+        {
+            if(op1->a == operations[i])
+                pr1=priority[i];
+            if(op2->a == operations[i])
+                pr2=priority[i];
+        }
+        return (pr1>pr2);
+    }
     Polynom<int> makeOPZ(Result& temp)
     {
         //to add 
@@ -41,6 +55,7 @@ private:
                 while (!stak.empty() && !stak.top()->isOpenBracket())
                 {
                     vect.push_back(stak.top());
+                    stak.pop();
                 }
                 if (stak.empty())
                 {
@@ -67,63 +82,66 @@ private:
                 }
                 stak.push(temp.result[i]);
             }
-            temp.result = vect;
         }
+        while (!stak.empty())
+        {
+            vect.push_back(stak.top());
+            stak.pop();
+        }
+        temp.result = vect;
         int i = 0;
         vector <Polynom<int>*> operands;
-        while (i < temp.result.size())
+        while (i < vect.size())
         {
-            if (temp.result[i]->isPolynom())
-                operands.push_back(temp.result[i]);
+            if (vect[i]->isPolynom())
+                operands.push_back(dynamic_cast<Polynom<int>*>(vect[i]));
             else
             {
                 if (operands.size() < 2)
                 {
                     //Error: number of operations is more than number of operands.
                 }
-                Polynom <int> m = operands.back()->a;
+                Polynom <int> *m = new Polynom<int>;
+                m = operands.back();
                 operands.pop_back();
-                Polynom <int> n = operands.back()->a;
+                Polynom <int> *n = new Polynom<int>;
+                n = operands.back();
                 operands.pop_back();
-                switch (temp.result[i]->isOperation())
+                switch (vect[i]->isOperation())
                 {
                 case 1:
-                    {    m += n;
-                    Polynom <int> * k = new Polynom <int> (m);
+                    {    *n += *m;
+                    Polynom <int> * k = new Polynom <int> (*n);
                     operands.push_back(k);
-                    delete [] k;
                     break;
                     }
                 case 2:
                     {
-                        m -= n;
-                        Polynom <int> * k = new Polynom <int> (m);
+                        *n -= *m;
+                        Polynom <int> * k = new Polynom <int> (*n);
                         operands.push_back(k);
-                        delete [] k;
+                        
                         break;
                     }
                 case 3:
                     {
-                        m *= n;
-                        Polynom <int> * k = new Polynom <int> (m);
+                        *n *= *m;
+                        Polynom <int> * k = new Polynom <int> (*n);
                         operands.push_back(k);
-                        delete [] k;
                         break;
                     }
                 case 4:
                     {
-                        m = m ^ n;
-                        Polynom <int> * k = new Polynom <int> (m);
+                        *n = (*n)(*m);
+                        Polynom <int> * k = new Polynom <int> (*n);
                         operands.push_back(k);
-                        delete [] k;
                         break;
                     }
                 case 5:
                     {
-                        m = m(n);
-                        Polynom <int> * k = new Polynom <int> (m);
+                        *n = *n^*m;
+                        Polynom <int> * k = new Polynom <int> (*n);
                         operands.push_back(k);
-                        delete [] k;
                         break;
                     }
                     //default:
@@ -142,7 +160,7 @@ private:
         //just make opz from it and write to opz field.
         Polynom <int>* m = new Polynom<int>;
         m = operands.back();
-        return m;
+        return *m;
     }
     Result makeEquals(Result& r)
     {
@@ -170,20 +188,6 @@ private:
         initial = r;
         makeOPZ(initial); 
         return makeOPZ(initial);
-    }
-    bool higherPriority (Token *op1, Token *op2) //priority comparison
-    {
-        const string operations[] = {"_", "+", "-", "*", "#", "^"};
-        int priority[] = {1, 1, 1, 2, 3, 4};
-        int pr1, pr2;
-        for(int i = 0; i < 6; i++)
-        {
-            if(op1->a == operations[i])
-                pr1=priority[i];
-            if(op2->a == operations[i])
-                pr2=priority[i];
-        }
-        return (pr1>pr2);
     }
 public:
     Map<string, Polynom<int>> getEquals();
