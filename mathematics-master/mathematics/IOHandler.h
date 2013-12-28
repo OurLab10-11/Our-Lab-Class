@@ -111,7 +111,7 @@ public:
                     ++i;
                     continue;
                 }
-                if (temp[i] == '[' || temp[i] == ']' || temp[i] == '(' || temp[i] == ')')
+                if (temp[i] == '(' || temp[i] == ')')
                 {
                     if (input != "")
                     {
@@ -121,6 +121,43 @@ public:
                     input = temp[i];
                     Operation* O = new Operation(input);
                     result[j].addToken(O);
+                    input = "";
+                    ++i;
+                    continue;
+                }
+
+                if (temp[i] == '[')
+                {
+                    if (input != "")
+                    {
+                        Polynom<int>*A = new Polynom<int>(input);
+                        result[j].addToken(A);
+                    }
+                    input = "(";
+                    Operation* O = new Operation(input);
+                    result[j].addToken(O);
+                    result[j].addToken(O);
+                    input = "";
+                    ++i;
+                    continue;
+                }
+
+                if (temp[i] == ']')
+                {
+                    if (input != "")
+                    {
+                        Polynom<int>*A = new Polynom<int>(input);
+                        result[j].addToken(A);
+                    }
+                    input = ")";
+                    Operation* O = new Operation(input);
+                    result[j].addToken(O);
+                    input = "$";
+                    Operation* A = new Operation(input);
+                    result[j].addToken(A);
+                    input = ")";
+                    Operation* B = new Operation(input);
+                    result[j].addToken(B);
                     input = "";
                     ++i;
                     continue;
@@ -276,7 +313,6 @@ public:
         //
         return Poly;
     }
-    //2 methods for solver.
     Polynom<int> getVariable(string variableName)
     {
         return polynoms.getVariable(variableName);

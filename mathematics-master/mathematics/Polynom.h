@@ -88,8 +88,12 @@ public:
            
     }
     int& getDeg();
-    Numb& getValue(const Numb& x);
 
+    Numb& getValue(const Numb& x);
+    Numb getFirstGree()
+    {
+        return coeff[0];
+    }
     Polynom<Numb> operator=(const Polynom<Numb>&);
     Numb& operator[](const int);
 

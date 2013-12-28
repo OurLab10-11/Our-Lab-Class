@@ -109,8 +109,11 @@ private:
                     //Error: number of operations is more than number of operands.
                 }
                 Polynom <int> *m = new Polynom<int>;
-                m = operands.back();
-                operands.pop_back();
+                if (vect[i]->a != "$")
+                {
+                    m = operands.back();
+                    operands.pop_back();
+                }
                 Polynom <int> *n = new Polynom<int>;
                 n = operands.back();
                 operands.pop_back();
@@ -151,12 +154,13 @@ private:
                         operands.push_back(k);
                         break;
                     }
-                /*case 6:
+                case 6:
                     {                       
-                        Polynom <int> * k = new Polynom <int> (*);
+                        *n = values[n->getFirstGree()];
+                        Polynom <int> * k = new Polynom <int> (*n);
                         operands.push_back(k);
                         break;
-                    }*/
+                    }
                     //default:
                     //Error: incorrect operation expression.
                 }
