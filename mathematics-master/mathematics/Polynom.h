@@ -3,41 +3,6 @@
 #include <string>
 #include <iostream>
 
-/*//implement templated class Polynom.
-//you can use following operations: T + T, T - T, T * T, T / T, T ^ int
-
-//you have to overload following operators: 
-//Polynom + Polynom, Polynom * Polynom, Polynom - Polynom, Polynom ^ int
-
-//also you have to implement Polynom(string), Polynom(), 
-//and of course Polynom(const Polynom&). The last one is IMPORTANT.
-
-
-
-
-
-//important remark 1: there's two different ways of implementing Polynom.
-
-
-//FIRST
-//store coeficients of Polynom using map<int, T>
-//the first parameter of map is the degree, and the second is the coefficient.
-
-//for example, if you have 3x^5 - 10x^2 + 7x - 30, your map is something like:
-//{ 5 -> 3; 2 -> -10; 1 -> 7; 0 - > -30 }
-
-//storing your coefficients in this way (NOT using array/list/vector) can save memory in the best way.
-//(because if you store your coefficients in the array, take a look at the next Polynom: x^10000 + 1
-
-//SECOND
-//storing coefficients of Polynom, using vector<T>
-//more convinient way, but if the degree of polynom is high, you can eat too much memory
-
-//(using map you can avoid it)
-
-
-//important remark 2: don't worry about ": public Token", it's for my needs (for parsing input string)*/
-
 #ifndef __Test__Polinomials__
 #define __Test__Polinomials__
 
@@ -47,7 +12,7 @@ template<class Numb>
 class Polynom : public Token
 {
 private:
-    static const int N = 10000;
+    static const int N = 1000;
     Numb coeff[N];
     int deg;
     Polynom<Numb> multByPowOfX(int);
@@ -69,30 +34,38 @@ public:
         }
         else
         {
-            int i;
-            for (i = 0; i < D.length(); ++i)
-                if (isalpha(D[i]))
-                    break;
-            if (i == D.length())
+            if (D == "i")
             {
-                coeff[0] = stod(D);
+                coeff[0].re = 0;
+                coeff[0].im = 1;
                 deg = 0;
             }
             else
             {
-                for(int j = 0; j < D.length(); ++j)
-                    coeff[i] = int(D[j]);
-                deg = D.length() - 1;
+                unsigned int i;
+                for (i = 0; i < D.length(); ++i)
+                    if (isalpha(D[i]))
+                        break;
+                if (i == D.length())
+                {
+                    coeff[0] = stod(D);
+                    deg = 0;
+                }
+                else
+                {
+                    for(unsigned int j = 0; j < D.length(); ++j)
+                        coeff[i] = int(D[j]);
+                    deg = D.length() - 1;
+                }
             }
         }
-           
     }
     int& getDeg();
 
     Numb& getValue(const Numb& x);
-    Numb getFirstGree()
+    int getFirstGree()
     {
-        return coeff[0];
+        return coeff[0].getRe();
     }
     Polynom<Numb> operator=(const Polynom<Numb>&);
     Numb& operator[](const int);
@@ -110,7 +83,7 @@ public:
     Polynom<Numb> operator*(const Polynom<Numb>&);
     Polynom<Numb> operator/(const Polynom<Numb>&);
     Polynom<Numb> operator%(const Polynom<Numb>&);
-    Polynom<Numb> operator^(const Polynom<Numb>&);
+    Polynom<Numb> operator^(int&);
     Polynom<Numb> operator/(Numb a);
 
     Polynom<Numb> operator+=(const Polynom<Numb>&);
@@ -134,18 +107,18 @@ template<class Numb> std::ostream& operator<<(std::ostream& os, Polynom<Numb> a)
     }
     if (a.deg == 1)
     {
-        if (a.coeff[1] == 1)
+        if (a.coeff[1].re == 1 && a.coeff[1].im == 0)
             os << "x";
         else
         {
-            if (a.coeff[1] == - 1)
+            if (a.coeff[1].re == - 1 && a.coeff[1].im == 0)
                 os << "-x";
             else
                 os << a.coeff[1] << "x";
         }
         if (a.coeff[0] != 0)
         {
-            if (a.coeff[0] > 0)
+            if (a.coeff[0].getRe() > 0)
                 os << "+" << a.coeff[0];
             else
                 os << a.coeff[0];
@@ -167,7 +140,7 @@ template<class Numb> std::ostream& operator<<(std::ostream& os, Polynom<Numb> a)
         {
             if (a.coeff[i] != 0)
             {
-                if (a.coeff[i] > 0)
+                if (a.coeff[i].getRe() > 0)
                     os << "+" << a.coeff[i] << "x^" << i;
                 else
                     os << a.coeff[i] << "x^" << i;
@@ -180,15 +153,15 @@ template<class Numb> std::ostream& operator<<(std::ostream& os, Polynom<Numb> a)
             if (a.coeff[1] == -1)
                 os << "-x";
             else
-                if (a.coeff[1] > 0)
-                    os << "+"<<a.coeff[1] << "x";
+                if (a.coeff[1].re > 0)
+                    os << "+"<< a.coeff[1] << "x";
                 else
-                    if (a.coeff[1] < 0)
-                        os << a.coeff[1] << "x";
+                    if (a.coeff[1].re != 0)
+                    os << a.coeff[1] << "x";
         }
         if (a.coeff[0] != 0)
         {
-            if (a.coeff[0] > 0)
+            if (a.coeff[0].re > 0)
                 os << "+" << a.coeff[0];
             else
                 os << a.coeff[0];
@@ -330,7 +303,7 @@ template<class Numb> Polynom<Numb> Polynom<Numb>::operator-(const Polynom<Numb>&
     for (int i = 0; i <= maxDeg; i++)
     {
         c.coeff[i] = coeff[i] - b.coeff[i];
-        if (c.coeff[i] != 0)
+        if (c.coeff[i].getRe() != 0)
             c.deg = i;
     }
 
@@ -339,7 +312,8 @@ template<class Numb> Polynom<Numb> Polynom<Numb>::operator-(const Polynom<Numb>&
 template<class Numb> Polynom<Numb> Polynom<Numb>::operator*(const Polynom<Numb>& b)
 {
     Polynom<Numb> c;
-    if (!(((coeff[0] == 0) && deg == 0) || ((b.coeff[0] == 0) && (b.deg == 0))))
+   
+    if (!(((coeff[0].re == 0) && deg == 0 && coeff[0].im == 0) || ((b.coeff[0].re == 0) && (b.deg == 0) && b.coeff[0].im == 0)))
     {
         for (int i = 0; i <= deg; i++)
         {
@@ -351,7 +325,7 @@ template<class Numb> Polynom<Numb> Polynom<Numb>::operator*(const Polynom<Numb>&
         }
 
         for (int i = deg + b.deg; i >= 0; i--)
-            if (c.coeff[i] != 0)
+            if (c.coeff[i].re != 0 || c.coeff[0].im != 0)
             {
                 c.deg = i;
                 break;
@@ -369,7 +343,7 @@ template<class Numb> Polynom<Numb> Polynom<Numb>::operator/(const Polynom<Numb>&
     rem = *this;
     c.deg = rem.deg - b.deg;
 
-    while (rem.deg >= b.deg)
+    while (rem.deg >= b.deg && !(rem[0].re == 0 && rem[0].im == 0 && rem.deg == 0))
     {
         c.coeff[rem.deg - b.deg] = rem.coeff[rem.deg]/b.coeff[b.deg];
         temp.multByPowOfX(rem.deg - b.deg);
@@ -404,11 +378,11 @@ template<class Numb> Polynom<Numb> Polynom<Numb>::operator%(const Polynom<Numb>&
 
     return rem;
 }
-template<class Numb> Polynom<Numb> Polynom<Numb>::operator^(const Polynom<Numb>& b)
+template<class Numb> Polynom<Numb> Polynom<Numb>::operator^(int& b)
 {
     Polynom<Numb> temp(*this);
     Polynom<Numb> res(1);
-    int n = b.coeff[0];
+    int n = b;
     while (n)
     {
         if(n & 1)
@@ -450,7 +424,7 @@ template<class Numb> Polynom<Numb> Polynom<Numb>::operator-=(const Polynom<Numb>
 template<class Numb> Polynom<Numb> Polynom<Numb>::operator*=(const Polynom<Numb>& b)
 {
     Polynom c;
-    if (!(((coeff[0] == 0) && deg == 0) || ((b.coeff[0] == 0) && (b.deg == 0))))
+    if (!(((coeff[0].getRe() == 0) && deg == 0 && coeff[0].im == 0) || ((b.coeff[0].getRe() == 0) && (b.deg == 0) && b.coeff[0].im == 0)))
     {
         for (int i = 0; i <= deg; i++)
         {

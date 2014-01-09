@@ -4,17 +4,15 @@
 #include <iostream>
 #include "Number.h"
 
-using std::string;
-using std::iostream;
-using std::vector;
+using namespace std;
 
 template<class KEY, class VALUE>
 class Map
 {
-private:
+public:
     vector<KEY> keys;
     vector<VALUE> values;
-public:
+
     void setVariable(KEY T1, VALUE T2)
     {
         keys.push_back(T1);

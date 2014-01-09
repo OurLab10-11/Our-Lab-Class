@@ -5,13 +5,12 @@
 using namespace std;
 
 template <class T>
-class Complex : public Number
+class Complex
 {
-private:
+public:
     double re;
     double im;
 
-public:
     Complex(void)
     {      
         re = 0;
@@ -24,7 +23,8 @@ public:
     }
     Complex(double temp)
     {
-        this->re = re;
+        this->re = temp;
+        this->im = 0;
     }
     Complex(int temp)
     {
@@ -33,6 +33,10 @@ public:
     }
     ~Complex()
     {}
+    double getRe() const 
+    {
+        return this->re;
+    }
 
     Complex operator + (const Complex& temp)
     {
@@ -56,6 +60,33 @@ public:
         return temp1;
 
     };
+    Complex operator / (const Complex& temp)
+    {
+        Complex<T> temp1;
+        temp1.re = this->re / temp.re;
+        temp1.im = this->im / temp.re;
+        return temp1;
+    }
+
+    Complex operator += (const Complex& temp)
+    {
+        this->re = this->re + temp.re;
+        this->im = this->im + temp.im;
+        return *this;
+    };
+    Complex operator -= (const Complex& temp)
+    {
+        this->re = this->re - temp.re;
+        this->im = this->im - temp.im;
+        return *this;
+    };
+    Complex operator *= (const Complex& temp)
+    {
+        this->re = this->re * temp.re - this->im * temp.im;
+        this->im = this->im * temp.re + this->re * temp.im;
+        return *this;
+    };
+
     Complex operator + (double& temp)
     {
         Complex<T> temp1;
@@ -107,12 +138,26 @@ public:
         else
             return false;
     };
+    bool operator != (const Complex& temp)
+    {
+        if ((!(this->re == temp.re)) || (!(this->im == temp.im)))
+            return true;
+        else
+            return false;
+    };
     bool operator == (const Complex& temp)
     {
-        if (this!=temp)
+        if (*this != temp)
             return false;
         else
             return true;
+    };
+    bool operator == (int& temp)
+    {
+        if (this->re == temp || temp->im == 0)
+            return true;
+        else
+            return false;
     };
 
     template <class T1> friend Complex<T1> operator+(double temp1, Complex<T1>& temp2)

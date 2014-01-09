@@ -8,17 +8,26 @@
 #include "Operation.h"
 #include "Map.h"
 #include "Token.h"
+#include "Complex.h"
+#include "Rational.h"
 
 using namespace std;
 
 class Solver
 {
 private:
+    bool isExist(string a)
+    {
+        for (unsigned int  i = 0; i < newNames.keys.size(); ++i)
+            if (a == newNames.keys[i])
+                return true;
+        return false;
+    }
     Result opz;
     Result initial;
     vector<string> keys;
-    vector<Polynom<int>> values;
-    Map<string, Polynom<int>> newNames;
+    vector<Polynom<Complex<Rational>>> values;
+    Map<string, Polynom<Complex<Rational>>> newNames;
     bool higherPriority (Token *op1, Token *op2) //priority comparison
     {
         const string operations[] = {"_", "+", "-", "*", "#", "^"};
@@ -33,18 +42,24 @@ private:
         }
         return (pr1>=pr2);
     }
-    Polynom<int> makeOPZ(Result& temp)
+    Polynom<Complex<Rational>> makeOPZ(Result& temp)
     {
         //to add 
         vector <Token*> vect;
         stack <Token*> stak;
         for (unsigned int i = 0; i < temp.result.size(); i++)
         {
-            if (temp.result[i]->isPolynom())
+            if (temp.result[i]->isPolynom() || temp.result[i]->a == "%")
             {
                 if ((temp.result[i]->a != "") && (temp.result[i]->a != "x"))
                 {
-                    Polynom<int>* A = new Polynom<int>(newNames.getVariable(temp.result[i]->a));
+                    Polynom<Complex<Rational>>* A = new Polynom <Complex<Rational>>;
+                    if (temp.result[i]->a == "%")
+                    {
+                        A = new Polynom<Complex<Rational>>(values.back());
+                    }
+                    else
+                        A = new Polynom<Complex<Rational>>(newNames.getVariable(temp.result[i]->a));
                     vect.push_back(A);
                     continue;
                 }
@@ -73,7 +88,8 @@ private:
                 }
                 if (stak.empty())
                 {
-                    return 0;//Error: not enough of opening brackets.
+                    Polynom<Complex<Rational>> A;
+                    return A;//Error: not enough of opening brackets.
                 }
                 //if (stak.top().isOpenBracket != temp.result[i].isCloseBracket()) //bracket's mismatch checking. If needed.
                 //error handler here
@@ -96,93 +112,107 @@ private:
             stak.pop();
         }
         temp.result = vect;
-        int i = 0;
-        vector <Polynom<int>*> operands;
+        unsigned int i = 0;
+        vector <Polynom<Complex<Rational>>*> operands;
         while (i < vect.size())
         {
             if (vect[i]->isPolynom())
-                operands.push_back(dynamic_cast<Polynom<int>*>(vect[i]));
+                operands.push_back(dynamic_cast<Polynom<Complex<Rational>>*>(vect[i]));
             else
             {
                 if (operands.size() < 2)
                 {
                     //Error: number of operations is more than number of operands.
                 }
-                Polynom <int> *m = new Polynom<int>;
-                if (vect[i]->a != "$")
+                if (vect[i]->a != "%")
                 {
-                    m = operands.back();
+                    Polynom <Complex<Rational>> *m = new Polynom<Complex<Rational>>;
+                    if (vect[i]->a != "$")
+                    {
+                        m = operands.back();
+                        operands.pop_back();
+                    }
+
+                    Polynom <Complex<Rational>> *n = new Polynom<Complex<Rational>>;
+                    n = operands.back();
                     operands.pop_back();
+
+                    switch (vect[i]->isOperation())
+                    {
+                    case 1:
+                        {
+                            Polynom <Complex<Rational>> * k = new Polynom <Complex<Rational>> (*n + *m);
+                            operands.push_back(k);
+                            break;
+                        }
+                    case 2:
+                        {
+                            Polynom <Complex<Rational>> * k = new Polynom <Complex<Rational>> (*n - *m);
+                            operands.push_back(k);
+                            break;
+                        }
+                    case 3:
+                        {
+                            Polynom <Complex<Rational>> * k = new Polynom <Complex<Rational>> (*n* *m);
+                            operands.push_back(k);
+                            break;
+                        }
+                    case 4:
+                        {
+                            Polynom<Complex<Rational>> * k = new Polynom<Complex<Rational>> (*n/(*m));
+                            operands.push_back(k);
+                            break;
+                        }
+                    case 5:
+                        {
+                            Polynom <Complex<Rational>> * k = new Polynom <Complex<Rational>> ((*n)(*m));
+                            operands.push_back(k);
+                            break;
+                        }
+                    case 6:
+                        {
+                            int a = m->getFirstGree();
+                            Polynom <Complex<Rational>> * k = new Polynom <Complex<Rational>> (*n^a);
+                            operands.push_back(k);
+                            break;
+                        }
+                    case 7:
+                        {                       
+                            Polynom <Complex<Rational>> * k = new Polynom <Complex<Rational>> (values[n->getFirstGree()]);
+                            operands.push_back(k);
+                            break;
+                        }
+                    }
                 }
-                Polynom <int> *n = new Polynom<int>;
-                n = operands.back();
-                operands.pop_back();
-                switch (vect[i]->isOperation())
+                else
                 {
-                case 1:
-                    {    *n += *m;
-                    Polynom <int> * k = new Polynom <int> (*n);
+                    Polynom <Complex<Rational>> * k = new Polynom <Complex<Rational>> (values.back());
                     operands.push_back(k);
-                    break;
-                    }
-                case 2:
-                    {
-                        *n -= *m;
-                        Polynom <int> * k = new Polynom <int> (*n);
-                        operands.push_back(k);
-                        
-                        break;
-                    }
-                case 3:
-                    {
-                        *n *= *m;
-                        Polynom <int> * k = new Polynom <int> (*n);
-                        operands.push_back(k);
-                        break;
-                    }
-                case 4:
-                    {
-                        *n = (*n)(*m);
-                        Polynom <int> * k = new Polynom <int> (*n);
-                        operands.push_back(k);
-                        break;
-                    }
-                case 5:
-                    {
-                        *n = *n^*m;
-                        Polynom <int> * k = new Polynom <int> (*n);
-                        operands.push_back(k);
-                        break;
-                    }
-                case 6:
-                    {                       
-                        *n = values[n->getFirstGree()];
-                        Polynom <int> * k = new Polynom <int> (*n);
-                        operands.push_back(k);
-                        break;
-                    }
+                }
                     //default:
                     //Error: incorrect operation expression.
-                }
+
+                
+
             }
             i++;
         }
         if (operands.size() != 1)
         {
-            //Error.
+            cout << "Stack isn't fuel" << endl;
         }
 
         //to do OPZ from tokens.
         //initial is the field already partitioned.
         //just make opz from it and write to opz field.
-        Polynom <int>* m = new Polynom<int>;
+        Polynom <Complex<Rational>>* m = new Polynom<Complex<Rational>>;
         m = operands.back();
         return *m;
     }
     Result makeEquals(Result& r)
     {
         int EQ = 0;
-        for (int i = 0; i < r.result.size(); ++i)
+        for (unsigned int i = 0; i < r.result.size(); ++i)
             if (r.result[i]->a == "=")
                 EQ++;
         if (EQ == 0)
@@ -191,8 +221,14 @@ private:
         }
         Result R;
         unsigned int step = 2;
+        if (isExist(r.result[0]->a))
+        {
+            for (unsigned int i = 0; i < newNames.keys.size(); ++i)
+                if (r.result[0]->a == newNames.keys[i])
+                    newNames.keys[i] = "";
+        }
         keys.push_back(r.result[0]->a);
-        Polynom<int> A;
+        Polynom<Complex<Rational>> A;
         for (step; step < r.result.size(); ++step)
             R.result.push_back(r.result[step]);
         //to do
@@ -201,10 +237,10 @@ private:
         return R;
     }
 public:
-    Map<string, Polynom<int>> getEquals();
-    Polynom<int> execute(Result& r)
+    Map<string, Polynom<Complex<Rational>>> getEquals();
+    Polynom<Complex<Rational>> execute(Result& r)
     {
-        Polynom<int> A = makeOPZ(makeEquals(r));
+        Polynom<Complex<Rational>> A = makeOPZ(makeEquals(r));
         values.push_back(A);
         if (keys.size() < values.size())
             keys.push_back("");

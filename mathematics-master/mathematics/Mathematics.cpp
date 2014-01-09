@@ -24,8 +24,8 @@ int main()
             break;
         else
         {
-            vector<Polynom<int>> response = handler.executeCommand(currentCommand);
-            for (int i = 0; i < response.size(); ++i)
+            vector<Polynom<Complex<Rational>>> response = handler.executeCommand(currentCommand);
+            for (unsigned int i = 0; i < response.size(); ++i)
             {
                 cout << "Out" << "[" << handler.counter + i << "] > ";
                 cout << response[i] << endl;

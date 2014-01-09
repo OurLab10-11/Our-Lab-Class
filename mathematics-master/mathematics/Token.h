@@ -9,27 +9,27 @@ class Token
 {
 public:
     string a; 
-    virtual int isOperation()
-    {
-        /*if (a == "+" || a == "-" || a == "*" || a == "^") // "/" cannot be mentioned here. It is used only in Rational, and there's Parser to think about it :)
-            return true;
-        else
-            return false;*/
-        const string operations[] = {"_", "+", "-", "*", "#", "^" , "$"};
-        int i;
-        for (i = 0; i < 7; i++)
-            if (a == operations[i])
-                break;
-        if (i > 6)
-            return 0;
-        return i;
-    }
     virtual bool isPolynom()
     {
         if (!isOpenBracket() && !isCloseBracket() && !isOperation())
             return true;
         else
             return false;
+    }
+    virtual int isOperation()
+    {
+        /*if (a == "+" || a == "-" || a == "*" || a == "^") // "/" cannot be mentioned here. It is used only in Rational, and there's Parser to think about it :)
+            return true;
+        else
+            return false;*/
+        const string operations[] = {"_", "+", "-", "*", "/", "#", "^" , "$", "%"};
+        int i;
+        for (i = 0; i < 9; i++)
+            if (a == operations[i])
+                break;
+        if (i > 8)
+            return 0;
+        return i;
     }
     virtual bool isSeparator()
     {

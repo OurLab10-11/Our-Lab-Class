@@ -7,10 +7,11 @@
 #include "Number.h"
 #include "Operation.h"
 #include "Map.h"
+#include "Rational.h"
 
 using namespace std;
 
-class Parser
+class Parser 
 {
 private:
     //IOHandler parent;
@@ -66,12 +67,12 @@ public:
         temp = deleteSpace(temp);
         int length = temp.length();
         int amountOfSeparator = 0;
-        for (int i = 0; i < temp.length(); ++i)
+        for (unsigned int i = 0; i < temp.length(); ++i)
             if (isSeparator(temp[i])) 
                 ++amountOfSeparator;
         result.resize(++amountOfSeparator);
         temp += " ";
-
+        
         string input = "";
         if (temp[0] == '-')
         {
@@ -98,8 +99,11 @@ public:
                     Operation* O = new Operation(input);
                     result[j].addToken(O);
                     input = "1";
-                    Polynom<int>* A = new Polynom<int>(input);
+                    Polynom<Complex<Rational>>* A = new Polynom<Complex<Rational>>(input);
                     result[j].addToken(A);
+                    input = "*";
+                    Operation* B = new Operation(input);
+                    result[j].addToken(B);
                     input = "";
                     ++i;
                     continue;
@@ -115,7 +119,7 @@ public:
                 {
                     if (input != "")
                     {
-                        Polynom<int>*A = new Polynom<int>(input);
+                        Polynom<Complex<Rational>>*A = new Polynom<Complex<Rational>>(input);
                         result[j].addToken(A);
                     }
                     input = temp[i];
@@ -130,7 +134,7 @@ public:
                 {
                     if (input != "")
                     {
-                        Polynom<int>*A = new Polynom<int>(input);
+                        Polynom<Complex<Rational>>*A = new Polynom<Complex<Rational>>(input);
                         result[j].addToken(A);
                     }
                     input = "(";
@@ -146,7 +150,7 @@ public:
                 {
                     if (input != "")
                     {
-                        Polynom<int>*A = new Polynom<int>(input);
+                        Polynom<Complex<Rational>>*A = new Polynom<Complex<Rational>>(input);
                         result[j].addToken(A);
                     }
                     input = ")";
@@ -167,7 +171,7 @@ public:
                 {
                     if (input != "")
                     {
-                        Polynom<int>* A = new Polynom <int>(input);
+                        Polynom<Complex<Rational>>* A = new Polynom<Complex<Rational>>(input);
                         result[j].addToken(A);
                     }
                     input = temp[i];
@@ -183,7 +187,7 @@ public:
                     input += temp[i];
                     if (!isdigit(temp[i + 1]) && temp[i + 1] != '.')
                     {
-                        Polynom<int>* O = new Polynom<int>(input);
+                        Polynom<Complex<Rational>>* O = new Polynom<Complex<Rational>>(input);
                         result[j].addToken(O);
                         input = "";
                         ++i;
@@ -203,9 +207,9 @@ public:
                     ++i;
                     if (!isalpha(temp[i]))
                     {
-                        Polynom<int>* O = new Polynom<int>(input);
+                        Polynom<Complex<Rational>>* O = new Polynom<Complex<Rational>>(input);
                         result[j].addToken(O);
-                        if (input !="x")
+                        if (input !="x" && input != "i")
                             result[j].result.back()->a = input;
                         input = "";
                         continue;
@@ -221,7 +225,7 @@ public:
                 }
                 else
                 {
-                    Polynom<int>* O = new Polynom<int>(input);
+                    Polynom<Complex<Rational>>* O = new Polynom<Complex<Rational>>(input);
                     result[j].addToken(O);
                 }
             }
@@ -246,6 +250,16 @@ public:
                     position--;
                     length--;
                 }
+            }
+        }
+        for (int position = 0; position < length - 1; ++position)
+        {
+            if (temp[position] == ')' && temp[position + 1] == '[')
+            {
+                temp.insert(position + 1, "*");
+                length++;
+                ++position;
+                
             }
         }
 
@@ -278,6 +292,18 @@ public:
                 }
             }
         }
+        for (int position = 0; position < length - 1; ++position)
+        {
+            if (temp[position] == '-')
+            {
+                if (isalnum(temp[position + 1]))
+                {
+                    temp.insert(position + 1,"1*");
+                    length += 2;
+                    position += 2;
+                }
+            }
+        }
         return temp;
     }
 };
@@ -288,8 +314,8 @@ private:
     Solver solver;
     Parser parser;
 public:
-    Map<string, Polynom<int>> polynoms; //  variables
-    vector<Polynom<int>> previousResults; // to support previous polynoms calls.
+    Map<string, Polynom<Complex<Rational>>> polynoms; //  variables
+    vector<Polynom<Complex<Rational>>> previousResults; // to support previous polynoms calls.
     int counter;
     IOHandler()
     {
@@ -299,11 +325,11 @@ public:
     {
         return counter;
     }
-    vector<Polynom<int>> executeCommand(string command)
+    vector<Polynom<Complex<Rational>>> executeCommand(string command)
     {
         vector<Result> response = parser.command(command);
-        vector<Polynom<int>> Poly;
-        for (int size = 0; size < response.size(); ++size)
+        vector<Polynom<Complex<Rational>>> Poly;
+        for (unsigned int size = 0; size < response.size(); ++size)
         {
             Poly.push_back(solver.execute(response[size]));
             previousResults.push_back(Poly[size]);
@@ -313,7 +339,7 @@ public:
         //
         return Poly;
     }
-    Polynom<int> getVariable(string variableName)
+    Polynom<Complex<Rational>> getVariable(string variableName)
     {
         return polynoms.getVariable(variableName);
         //extracting from the map value of variableName
@@ -321,7 +347,7 @@ public:
         //return map.get(variableName);
 
     }
-    Polynom<int> getPreviousResult(int Number)
+    Polynom<Complex<Rational>> getPreviousResult(int Number)
     {
         //to do
         //must throws exception if number out of bounds

@@ -6,46 +6,7 @@ class Rational
 private:
 	int numerator;
 	int denominator;
-    
-    void makeGood();
-public:
-	Rational();
-	Rational(int);
-    
-    double getDouble();
-    
-	Rational operator=(const Rational&);
-	Rational operator+(const Rational&);
-	Rational operator-(const Rational&);
-	Rational operator/(const Rational&);
-	Rational operator*(const Rational&);
-	Rational operator%(const Rational&);
-	Rational operator^(int n);
-	
-    friend std::ostream& operator<<(std::ostream&, const Rational&);
-    
-    bool operator==(const Rational&);
-    bool operator!=(const Rational&);
-    
-    friend Rational operator+(int, const Rational&);
-    friend Rational operator-(int, const Rational&);
-    friend Rational operator*(int, const Rational&);
-    friend Rational operator/(int, const Rational&);
-    
-};
-#endif
-Rational::Rational()
-{
-	numerator = 0;
-	denominator = 1;
-}
-Rational::Rational(int a)
-{
-	numerator = a;
-	denominator = 1;
-}
-void Rational::makeGood()
-{
+    void makeGood(){
 	if (this->denominator < 0)
 	{
 		this -> numerator *= -1;
@@ -63,113 +24,133 @@ void Rational::makeGood()
     
 	this->numerator /= divider;
 	this->denominator /= divider;
-}
-double Rational::getDouble()
-{
+};
+public:
+	Rational()
+    {
+     	numerator = 0;
+	    denominator = 1;       
+    }
+	Rational(int a)
+    {
+	    numerator = a;
+	    denominator = 1;
+    };
+    double getDouble(){
     return 1.*numerator/denominator;
-}
-Rational Rational::operator=(const Rational& a)
-{
-	this->numerator = a.numerator;
-	this->denominator = a.denominator;
-	return * this;
-}
-Rational Rational::operator+(const Rational& a)
-{
-	Rational temp;
-	temp.numerator = (this->numerator * a.denominator) + (this->denominator * a.numerator);
-	temp.denominator = this->denominator * a.denominator;
-	temp.makeGood();
-	return temp;
-}
-Rational Rational::operator-(const Rational& a)
-{
-	Rational temp;
-	temp.numerator = (this->numerator * a.denominator) - (this->denominator * a.numerator);
-	temp.denominator = this->denominator * a.denominator;
-	temp.makeGood();
-	return temp;
-}
-Rational Rational::operator*(const Rational& a)
-{
-	Rational temp;
-	temp.numerator = this->numerator * a.numerator;
-	temp.denominator = this->denominator * a.denominator;
-	temp.makeGood();
-	return temp;
-}
-Rational Rational::operator/(const Rational& a)
-{
-	Rational temp;
-	temp.numerator = this->numerator * a.denominator;
-	temp.denominator = this->denominator * a.numerator;
-	temp.makeGood();
-	return temp;
-}
-Rational Rational::operator%(const Rational& a)
-{
-	Rational temp;
-	return temp;
-}
-Rational Rational::operator^(int n)
-{
-	Rational res(1);
-	Rational temp(*this);
-	while (n)
-	{
-		if (n & 1)
-			res = res * temp;
-		temp = temp * temp;
-		n >>= 2;
-	}
+};
     
-	return res;
-}
-bool Rational::operator==(const Rational& b)
-{
-    if ((this->numerator == b.numerator) && (this->denominator == b.denominator))
-        return true;
-    return false;
-}
-bool Rational::operator!=(const Rational& b)
-{
-    if ((this->numerator == b.numerator) && (this->denominator == b.denominator))
+	Rational operator=(const Rational& a)
+    {
+	    this->numerator = a.numerator;
+	    this->denominator = a.denominator;
+	    return * this;
+    }
+	Rational operator+(const Rational& a)
+    {
+	    Rational temp;
+	    temp.numerator = (this->numerator * a.denominator) + (this->denominator * a.numerator);
+	    temp.denominator = this->denominator * a.denominator;
+	    temp.makeGood();
+	    return temp;
+    }
+	Rational operator-(const Rational& a)
+    {
+	    Rational temp;
+	    temp.numerator = (this->numerator * a.denominator) - (this->denominator * a.numerator);
+	    temp.denominator = this->denominator * a.denominator;
+	    temp.makeGood();
+	    return temp;
+    }
+	Rational operator/(const Rational& a)
+    {
+	    Rational temp;
+	    temp.numerator = this->numerator * a.denominator;
+	    temp.denominator = this->denominator * a.numerator;
+	    temp.makeGood();
+	    return temp;
+    };
+	Rational operator*(const Rational& a)
+    {
+	    Rational temp;
+	    temp.numerator = this->numerator * a.numerator;
+	    temp.denominator = this->denominator * a.denominator;
+	    temp.makeGood();
+	    return temp;
+    }
+	Rational operator%(const Rational& a)
+    {
+    	Rational temp;
+	    return temp;
+    };
+
+	Rational operator^(int n)
+    {
+	    Rational res(1);
+	    Rational temp(*this);
+	    while (n)
+	    {
+		    if (n & 1)
+			    res = res * temp;
+		    temp = temp * temp;
+		    n >>= 2;
+	    }
+    	return res;
+    }
+	
+    friend std::ostream& operator<<(std::ostream& os, const Rational& a)
+    {
+        os << a.numerator;
+        if (a.denominator != 1)
+            os << "/" << a.denominator;
+    
+        return os;
+    }
+    
+    bool operator==(const Rational& b)
+    {
+        if ((this->numerator == b.numerator) && (this->denominator == b.denominator))
+            return true;
         return false;
-    return true;
-}
-Rational operator+(int a, const Rational& b)
-{
-    Rational c;
-    Rational b1(b);
-    c = b1 + a;
-    return c;
-}
-Rational operator-(int a, const Rational& b)
-{
-    Rational c;
-    Rational b1(b);
-    c = b1 - a;
-    return c;
-}
-Rational operator*(int a, const Rational& b)
-{
-    Rational c;
-    Rational b1(b);
-    c = b1 * a;
-    return c;
-}
-Rational operator/(int a, const Rational& b)
-{
-    Rational c;
-    Rational b1(b);
-    c = b1 / a;
-    return c;
-}
-std::ostream& operator<<(std::ostream& os, const Rational& a)
-{
-    os << a.numerator;
-    if (a.denominator != 1)
-        os << "/" << a.denominator;
+    }
+    bool operator!=(const Rational& b)
+    {
+        if ((this->numerator == b.numerator) && (this->denominator == b.denominator))
+            return false;
+        return true;
+    }
     
-    return os;
-}
+    friend Rational operator+(int a, const Rational& b)
+    {
+        Rational c;
+        Rational b1(b);
+        c = b1 + a;
+        return c;
+    }
+    friend Rational operator-(int a, const Rational& b)
+    {
+        Rational c;
+        Rational b1(b);
+        c = b1 - a;
+        return c;
+    }
+    friend Rational operator*(int a, const Rational& b)
+    {
+        Rational c;
+        Rational b1(b);
+        c = b1 * a;
+        return c;
+    }
+    friend Rational operator/(int a, const Rational& b)
+    {
+        Rational c;
+        Rational b1(b);
+        c = b1 / a;
+        return c;
+    }
+    
+};
+#endif
+
+
+
