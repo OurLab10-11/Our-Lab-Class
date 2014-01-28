@@ -5,12 +5,7 @@
 #include "Complex.h"
 #include "Polynom.h"
 
-using std::string;
-using std::cin;
-using std::cout;
-using std::vector;
-using std::getline;
-using std::endl;
+using namespace std;
 
 int main()
 {

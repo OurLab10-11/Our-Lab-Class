@@ -8,8 +8,8 @@ template <class T>
 class Complex
 {
 public:
-    double re;
-    double im;
+    T re;
+    T im;
 
     Complex(void)
     {      
@@ -33,7 +33,7 @@ public:
     }
     ~Complex()
     {}
-    double getRe() const 
+    T getRe() const 
     {
         return this->re;
     }
@@ -186,22 +186,22 @@ public:
     }
     template <class T1> friend ostream& operator << (ostream& os, const Complex<T1>& temp)
     {
-        double re = temp.re;
-        double im = temp.im;
-        if (!im)
+        T1 re = temp.re;
+        T1 im = temp.im;
+        if (!im.numerator)
         {
             cout << re;
             return os;
         }
-        if (re)
+        if (re.numerator)
             cout << re << " ";
-        if (im < 0)
+        if (im.numerator < 0)
         {
-            cout << "- " << -im << "i";
+            cout << "- " << -1*im << "i";
         }
         else
         {
-            cout << "+ " << im << "i";;
+            cout << "+ " << im << "i";
         }
         return os;
     };

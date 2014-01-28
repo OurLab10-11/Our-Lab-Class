@@ -6,6 +6,8 @@
 
 using namespace std;
 
+
+
 template<class KEY, class VALUE>
 class Map
 {
@@ -28,6 +30,8 @@ public:
             else
                 ++i;
         }
-        return "ERROR";
+        Polynom<Complex<Rational>> B;
+        B.coeff[0].re.numerator = 10e8;
+        return B;
     }
 };

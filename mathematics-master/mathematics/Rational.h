@@ -4,28 +4,46 @@
 class Rational
 {
 private:
-	int numerator;
-	int denominator;
-    void makeGood(){
-	if (this->denominator < 0)
-	{
-		this -> numerator *= -1;
-		this -> denominator *= -1;
-	}
-	Rational temp;
-    temp.numerator = this->numerator;
-	temp.denominator = this->denominator;
-	while((temp.numerator!=0) && (temp.denominator!=0))
-		if (temp.numerator > temp.denominator)
-            temp.numerator %= temp.denominator;
-		else
-            temp.denominator %= temp.numerator;
-	int divider = temp.numerator + temp.denominator;
-    
-	this->numerator /= divider;
-	this->denominator /= divider;
+	
+    void makeGood()
+    {
+        bool flag;
+        if ((this -> numerator < 0 && this-> denominator < 0) || (this -> numerator >= 0 && this-> denominator > 0))
+            flag = false;
+        else
+            flag = true;
+	    if (this -> denominator < 0)
+	    {
+		    this -> numerator *= -1;
+		    this -> denominator *= -1;
+	    }
+	    Rational temp;
+        if (flag)
+        {
+            temp.numerator = -this->numerator;
+	        temp.denominator = this->denominator;
+        }
+        else
+        {
+            temp.numerator = this->numerator;
+	        temp.denominator = this->denominator;
+        }
+	    while((temp.numerator!=0) && (temp.denominator!=0))
+        {
+		    if (temp.numerator > temp.denominator)
+                temp.numerator %= temp.denominator;
+		    else
+                temp.denominator %= temp.numerator;
+        }
+	    int divider = temp.numerator + temp.denominator;
+        
+	    this->numerator /= divider;
+	    this->denominator /= divider;
+
 };
 public:
+    int numerator;
+	int denominator;
 	Rational()
     {
      	numerator = 0;
@@ -40,7 +58,7 @@ public:
     return 1.*numerator/denominator;
 };
     
-	Rational operator=(const Rational& a)
+    Rational operator=(const Rational& a)
     {
 	    this->numerator = a.numerator;
 	    this->denominator = a.denominator;

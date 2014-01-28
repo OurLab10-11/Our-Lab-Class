@@ -11,7 +11,9 @@
 #include "Complex.h"
 #include "Rational.h"
 
+
 using namespace std;
+
 
 class Solver
 {
@@ -30,10 +32,10 @@ private:
     Map<string, Polynom<Complex<Rational>>> newNames;
     bool higherPriority (Token *op1, Token *op2) //priority comparison
     {
-        const string operations[] = {"_", "+", "-", "*", "#", "^"};
-        int priority[] = {1, 1, 1, 2, 3, 4};
+        const string operations[] = {"_", "+", "-", "*", "/", "#", "^"};
+        int priority[] = {1, 1, 1, 2, 2, 3, 4};
         int pr1, pr2;
-        for(int i = 0; i < 6; i++)
+        for(int i = 0; i < 7; i++)
         {
             if(op1->a == operations[i])
                 pr1=priority[i];
@@ -44,7 +46,8 @@ private:
     }
     Polynom<Complex<Rational>> makeOPZ(Result& temp)
     {
-        //to add 
+        vector <Token*> openingBrakets;
+        vector <Token*> closingBrakets;
         vector <Token*> vect;
         stack <Token*> stak;
         for (unsigned int i = 0; i < temp.result.size(); i++)
@@ -56,10 +59,25 @@ private:
                     Polynom<Complex<Rational>>* A = new Polynom <Complex<Rational>>;
                     if (temp.result[i]->a == "%")
                     {
-                        A = new Polynom<Complex<Rational>>(values.back());
+                        if (values.size() == 0)
+                        {
+                            Polynom<Complex<Rational>> *B = new Polynom<Complex<Rational>>; 
+                            B->exception.error = "Can not take last Output";
+                            return *B;
+                        }
+                        else
+                            A = new Polynom<Complex<Rational>>(values.back());
                     }
                     else
                         A = new Polynom<Complex<Rational>>(newNames.getVariable(temp.result[i]->a));
+                    if (A->getFirstGree() == 10e8)
+                    {
+                        Polynom <Complex<Rational>>* m = new Polynom<Complex<Rational>>;
+                        string error(temp.result[i]->a);
+                        m->exception.error = error;
+                        m->exception.error += " is undefined";
+                        return *m;
+                    }
                     vect.push_back(A);
                     continue;
                 }
@@ -68,6 +86,7 @@ private:
             }
             if (temp.result[i]->isOpenBracket())
             {
+                openingBrakets.push_back(temp.result[i]);
                 if (temp.result[i]->a == "[")
                 {
                     temp.result[i]->a = "$";
@@ -81,6 +100,7 @@ private:
             }
             if (temp.result[i]->isCloseBracket())
             {
+                closingBrakets.push_back(temp.result[i]);
                 while (!stak.empty() && !stak.top()->isOpenBracket())
                 {
                     vect.push_back(stak.top());
@@ -88,12 +108,14 @@ private:
                 }
                 if (stak.empty())
                 {
-                    Polynom<Complex<Rational>> A;
-                    return A;//Error: not enough of opening brackets.
+                    Polynom<Complex<Rational>> *A = new Polynom<Complex<Rational>>;
+                    A->exception.error = "Does not have opening breckets";
+                    return *A;
                 }
                 //if (stak.top().isOpenBracket != temp.result[i].isCloseBracket()) //bracket's mismatch checking. If needed.
                 //error handler here
                 stak.pop();
+
                 continue;
             }
             if (temp.result[i]->isOperation())
@@ -108,6 +130,12 @@ private:
         }
         while (!stak.empty())
         {
+            if (stak.top()->isOpenBracket())
+            {
+                Polynom <Complex<Rational>> *d = new Polynom<Complex<Rational>>;
+                d->exception.error = "Does not have close brakets";
+                return *d;
+            }
             vect.push_back(stak.top());
             stak.pop();
         }
@@ -129,11 +157,23 @@ private:
                     Polynom <Complex<Rational>> *m = new Polynom<Complex<Rational>>;
                     if (vect[i]->a != "$")
                     {
+                        if (operands.size() == 0)
+                        {
+                            Polynom <Complex<Rational>> *d = new Polynom<Complex<Rational>>;
+                            d->exception.error = "Does not have digits";
+                            return *d;
+                        }
                         m = operands.back();
                         operands.pop_back();
                     }
 
                     Polynom <Complex<Rational>> *n = new Polynom<Complex<Rational>>;
+                    if (operands.size() == 0)
+                    {
+                        Polynom <Complex<Rational>> *d = new Polynom<Complex<Rational>>;
+                        d->exception.error = "Does not have digits";
+                        return *d;
+                    }
                     n = operands.back();
                     operands.pop_back();
 
@@ -177,7 +217,15 @@ private:
                             break;
                         }
                     case 7:
-                        {                       
+                        {     
+                            if (n->getFirstGree() >= values.size())
+                            {
+                                Polynom <Complex<Rational>> * d = new Polynom <Complex<Rational>>;
+                                d->exception.error = "Can not take [";
+                                d->exception.error += to_string(n->getFirstGree());
+                                d->exception.error += "]";
+                                return *d;
+                            }
                             Polynom <Complex<Rational>> * k = new Polynom <Complex<Rational>> (values[n->getFirstGree()]);
                             operands.push_back(k);
                             break;
@@ -189,25 +237,34 @@ private:
                     Polynom <Complex<Rational>> * k = new Polynom <Complex<Rational>> (values.back());
                     operands.push_back(k);
                 }
-                    //default:
-                    //Error: incorrect operation expression.
-
-                
-
+                //default:
+                //Error: incorrect operation expression.
             }
-            i++;
+            ++i;
         }
-        if (operands.size() != 1)
+        if (operands.size() == 0)
         {
-            cout << "Stack isn't fuel" << endl;
+            Polynom <Complex<Rational>>* m = new Polynom<Complex<Rational>>;
+            string error("Please, enter expression");
+            m->exception.error = error;
+            return *m;
         }
-
-        //to do OPZ from tokens.
-        //initial is the field already partitioned.
-        //just make opz from it and write to opz field.
-        Polynom <Complex<Rational>>* m = new Polynom<Complex<Rational>>;
-        m = operands.back();
-        return *m;
+        else
+        {
+            if (operands.size() > 1)
+            {
+                Polynom <Complex<Rational>>* m = new Polynom<Complex<Rational>>;
+                string error("Not correct expression");
+                m->exception.error = error;
+                return *m;
+            }
+            else
+            {
+                Polynom <Complex<Rational>>* m = new Polynom<Complex<Rational>>;
+                m = operands.back();
+                return *m;
+            }
+        }
     }
     Result makeEquals(Result& r)
     {

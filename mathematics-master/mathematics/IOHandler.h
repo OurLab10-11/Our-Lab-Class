@@ -12,12 +12,7 @@
 using namespace std;
 
 class Parser 
-{
-private:
-    //IOHandler parent;
-    // to extract some variables from parent.
-    // use getVariables or getPreviousResult in makeOPZ methods
-    // change [i] to getPreviousResult and <varName> to getVariable(varName)    
+{      
 public:
     Parser()
     {};
@@ -94,16 +89,20 @@ public:
                 }
                 if (isOperation(temp[i]) && temp[i + 1] == 'i')
                 {
-                    input = "";
                     input += temp[i];
-                    Operation* O = new Operation(input);
-                    result[j].addToken(O);
+                    Operation* C = new Operation(input);
+                    result[j].addToken(C);
                     input = "1";
                     Polynom<Complex<Rational>>* A = new Polynom<Complex<Rational>>(input);
                     result[j].addToken(A);
                     input = "*";
                     Operation* B = new Operation(input);
                     result[j].addToken(B);
+                    ++i;
+                    input = "";
+                    input += temp[i];
+                    Polynom<Complex<Rational>>* O = new Polynom<Complex<Rational>>(input);
+                    result[j].addToken(O);
                     input = "";
                     ++i;
                     continue;
@@ -198,6 +197,9 @@ public:
                         input +=temp[i + 1];
                         i = i + 1;
                         ++i;
+                        Polynom<Complex<Rational>>* K = new Polynom<Complex<Rational>>(input);
+                        result[j].addToken(K);
+                        input = "";
                         continue;
                     }
                 }   
@@ -334,9 +336,7 @@ public:
             Poly.push_back(solver.execute(response[size]));
             previousResults.push_back(Poly[size]);
         }
-        //to do
-        //adding newNames if non-empty.
-        //
+        
         return Poly;
     }
     Polynom<Complex<Rational>> getVariable(string variableName)

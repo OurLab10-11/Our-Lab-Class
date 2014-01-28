@@ -2,13 +2,14 @@
 #include <iostream>
 #include <string>
 #include "Polynom.h"
+#include "Error.h"
 
 using namespace std;
 
 class Token
 {
 public:
-    string a; 
+    string a;
     virtual bool isPolynom()
     {
         if (!isOpenBracket() && !isCloseBracket() && !isOperation())

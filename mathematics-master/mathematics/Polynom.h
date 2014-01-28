@@ -1,6 +1,7 @@
 #pragma once
 #include "Token.h"
 #include <string>
+#include "Error.h"
 #include <iostream>
 
 #ifndef __Test__Polinomials__
@@ -13,11 +14,13 @@ class Polynom : public Token
 {
 private:
     static const int N = 1000;
-    Numb coeff[N];
     int deg;
     Polynom<Numb> multByPowOfX(int);
 
 public:
+    Numb coeff[N];
+
+    Error exception;
     Polynom();
     Polynom(const Polynom<Numb>&);
     Polynom(Numb);
@@ -65,7 +68,7 @@ public:
     Numb& getValue(const Numb& x);
     int getFirstGree()
     {
-        return coeff[0].getRe();
+        return coeff[0].getRe().numerator;
     }
     Polynom<Numb> operator=(const Polynom<Numb>&);
     Numb& operator[](const int);
@@ -100,95 +103,320 @@ public:
 #endif
 template<class Numb> std::ostream& operator<<(std::ostream& os, Polynom<Numb> a)
 {
-    if (a.deg == 0)
+    if (a.exception.error != "No error")
     {
-        os <<  a.coeff[0];
+        os << a.exception.error;
         return os;
     }
-    if (a.deg == 1)
+    else
     {
-        if (a.coeff[1].re == 1 && a.coeff[1].im == 0)
-            os << "x";
-        else
+        if (a.deg == 0)
         {
-            if (a.coeff[1].re == - 1 && a.coeff[1].im == 0)
-                os << "-x";
-            else
-                os << a.coeff[1] << "x";
-        }
-        if (a.coeff[0] != 0)
-        {
-            if (a.coeff[0].getRe() > 0)
-                os << "+" << a.coeff[0];
-            else
-                os << a.coeff[0];
-        }
-        return os;
-    }
-    if (a.deg > 1)
-    {
-        if (a.coeff[a.deg] == 1)
-            os << "x^" << a.deg;
-        else
-        {
-            if (a.coeff[a.deg] == - 1)
-                os << "-x^"<< a.deg;
-            else
-                os << a.coeff[a.deg] << "x^" << a.deg;
-        }
-        for (int i = a.deg - 1; i >= 2; --i)
-        {
-            if (a.coeff[i] != 0)
+            if (a.coeff[0].re.numerator > 0)
             {
-                if (a.coeff[i].getRe() > 0)
-                    os << "+" << a.coeff[i] << "x^" << i;
+                os << a.coeff[0].re;
+                if (a.coeff[0].im.numerator == 0)
+                    return os;
+                if (a.coeff[0].im.numerator == 1 && a.coeff[0].im.denominator == 1)
+                    os << "+i";
+                if (a.coeff[0].im.numerator == -1 && a.coeff[0].im.denominator == 1)
+                    os << "-i";
+                if (a.coeff[0].im.numerator > 0 && a.coeff[0].im.numerator != 1 && a.coeff[0].im.denominator == 1)
+                    os << "+" << a.coeff[0].im << "i";
+                if (a.coeff[0].im.numerator < 0 && a.coeff[0].im.numerator != -1 && a.coeff[0].im.denominator == 1)
+                    os << a.coeff[0].im << "i";
+                return os;
+            }
+            else
+            {
+                if (a.coeff[0].re.numerator == 0 && a.coeff[0].im.numerator == 0)
+                {
+                    os << 0;
+                    return os;
+                }
                 else
-                    os << a.coeff[i] << "x^" << i;
+                {
+                    if (a.coeff[0].re.numerator == 0)
+                    {
+                        if (a.coeff[0].im.numerator == 1 && a.coeff[0].im.denominator == 1)
+                            os << "i";
+                        else
+                            if (a.coeff[0].im.numerator == -1 && a.coeff[0].im.denominator == 1)
+                                os << "-i";
+                            else
+                                os << a.coeff[0].im << "i";
+                        return os;
+                    }
+                    else
+                    {
+                        os << a.coeff[0].re;
+                        if (a.coeff[0].im.numerator < 0)
+                            if (a.coeff[0].im.numerator == -1 && a.coeff[0].im.denominator == 1)
+                                os << "-i";
+                            else
+                                os << a.coeff[0].im << "i";
+                        else
+                            if (a.coeff[0].im.numerator > 0)
+                                if (a.coeff[0].im.numerator == -1 && a.coeff[0].im.denominator == 1)
+                                    os << "+i";
+                                else
+                                    os << "+" << a.coeff[0].im << "i";
+                    }
+                    return os;
+                }
+            }
+            return os;
+        }
+        if (a.deg == 1)
+        {
+            if (a.coeff[1].re.numerator == 0 || a.coeff[1].im.numerator == 0)
+            {
+                if (a.coeff[1].re.numerator != 0)
+                {
+                    if (a.coeff[1].re.numerator == 1 && a.coeff[1].re.denominator == 1)
+                        os << "x";
+                    else
+                        if (a.coeff[1].re.numerator ==  -1 && a.coeff[1].re.denominator == 1)
+                            os << "-x";
+                        else
+                            os << a.coeff[1].re << "x";
+                }
+                else
+                {
+                    if (a.coeff[1].im.numerator == 1 && a.coeff[1].re.denominator == 1)
+                        os << "ix";
+                    else
+                        if (a.coeff[1].im.numerator == -1 && a.coeff[1].im.denominator == 1)
+                            os << "-ix";
+                        else
+                            os << a.coeff[1].im << "ix";
+                }
+            }
+            else
+            {
+                os << "(";
+                os << a.coeff[1].re ;
+                if (a.coeff[1].im.numerator == 1 && a.coeff[1].im.denominator == 1)
+                    os << "+i";
+                else
+                    if (a.coeff[1].im.numerator == -1 && a.coeff[1].im.denominator == 1)
+                        os << "-i";
+                    else
+                        if (a.coeff[1].im.numerator > 0)
+                            os << "+" << a.coeff[1].im << "i";
+                        else
+                            os << a.coeff[1].im << "i";
+                os << ")x";
+            }
+            if (a.coeff[0].re.numerator == 0 && a.coeff[0].im.numerator == 0)
+                return os;
+            if (a.coeff[0].re.numerator == 0 || a.coeff[0].im.numerator == 0)
+            {
+                if (a.coeff[0].re.numerator != 0)
+                    if (a.coeff[0].re.numerator > 0)
+                        os << "+" << a.coeff[0].re;
+                    else
+                        os << a.coeff[0].re;
+                else
+                {
+                    if (a.coeff[0].im.numerator > 0)
+                        if (a.coeff[0].im.numerator == 1 && a.coeff[0].im.denominator == 1)
+                            os << "+i";
+                        else
+                            os << "+" << a.coeff[0].im << "i";
+                    else
+                        if (a.coeff[0].im.numerator == -1 && a.coeff[0].im.denominator == 1)
+                            os << "-i";
+                        else
+                            os << a.coeff[0].im << "i";
+
+                }
+            }
+            else
+            {
+                if (a.coeff[0].re.numerator > 0)
+                    os << "+" << a.coeff[0].re;
+                else
+                    os << a.coeff[0].im;
+                if (a.coeff[0].im.numerator > 0)
+                    if (a.coeff[0].im.numerator == 1 && a.coeff[0].im.denominator == 1)
+                        os << "+i";
+                    else
+                        os << "+" << a.coeff[0].im << "i";
+                else
+                    if (a.coeff[0].im.numerator == -1 && a.coeff[0].im.denominator == 1)
+                        os << "-i";
+                    else
+                        os << a.coeff[0].im << "i";
+            }
+            return os;
+        }
+        if (a.deg > 1)
+        {
+            if (a.coeff[a.deg].re.numerator == 0 || a.coeff[a.deg].im.numerator == 0)
+            {
+                if (a.coeff[a.deg].re.numerator != 0)
+                {
+                    if (a.coeff[a.deg].re.numerator == 1 && a.coeff[a.deg].re.denominator == 1)
+                        os << "x^" << a.deg;
+                    else
+                        if (a.coeff[a.deg].re.numerator == -1 && a.coeff[a.deg].re.denominator == 1)
+                            os << "-x^" << a.deg;
+                        else
+                            os << a.coeff[a.deg] << "x^" << a.deg;
+                }
+                else
+                {
+                    if (a.coeff[a.deg].im.numerator == 1 && a.coeff[a.deg].im.denominator == 1)
+                        os << "ix^" << a.deg;
+                    else
+                        if (a.coeff[a.deg].im.numerator == -1 && a.coeff[a.deg].im.denominator == 1)
+                            os << "-ix^" << a.deg;
+                        else
+                            os << a.coeff[a.deg] << "ix^" << a.deg;
+                }
+            }
+            else
+            {
+                os << "(" << a.coeff[a.deg].re;
+                if (a.coeff[a.deg].im.numerator == 1 && a.coeff[a.deg].im.denominator == 1)
+                    os << "+i";
+                else
+                    if (a.coeff[a.deg].im.numerator == -1 && a.coeff[a.deg].im.denominator == 1)
+                        os << "-i";
+                    else
+                        if (a.coeff[a.deg].im.numerator > 0)
+                            os << "+" << a.coeff[a.deg].im << "i";
+                        else
+                            os << a.coeff[a.deg].im << "i";
+                os << ")x^" << a.deg;
+            }
+            for (int i = a.deg - 1; i >= 2; --i)
+            {
+                if (a.coeff[i].re.numerator == 0 && a.coeff[i].im.numerator == 0)
+                    continue;
+                if (a.coeff[i].re.numerator == 0 || a.coeff[i].im.numerator == 0)
+                {
+                    if (a.coeff[i].re.numerator != 0)
+                        if (a.coeff[i].re.numerator > 0)
+                            if (a.coeff[i].re.numerator == 1 && a.coeff[i].re.denominator == 1)
+                                os << "x^" << i;
+                            else
+                                os << "+" << a.coeff[i].re << "x^" << i;
+                        else
+                            if (a.coeff[i].re.numerator == -1 && a.coeff[i].re.denominator == 1)
+                                os << "-x^" << i;
+                            else
+                                os << a.coeff[i].re << "x^" << i;
+                    else
+                        if (a.coeff[i].im.numerator > 0)
+                            if (a.coeff[i].im.numerator == 1 && a.coeff[i].im.denominator == 1)
+                                os << "+ix^" << i;
+                            else
+                                os << "+" << a.coeff[i].im << "ix^" << i;
+                        else
+                            if (a.coeff[i].im.numerator == -1 && a.coeff[i].im.denominator == 1)
+                                os << "-ix^" << i;
+                            else
+                                os << a.coeff[i].im << "ix^" << i;
+                }
+                else
+                {
+                    os << "+(" << a.coeff[i].re;    
+                    if (a.coeff[i].im.numerator > 0)
+                        if (a.coeff[i].im.numerator == 1 && a.coeff[i].im.denominator == 1)
+                            os << "+i";
+                        else
+                            os << "+" << a.coeff[i].im << "i";
+                    else
+                        if (a.coeff[i].im.numerator == -1 && a.coeff[i].im.denominator == 1)
+                            os << a.coeff[i].im << "i";
+                    os << ")x^" << i;
+                }
+
+            }
+
+
+            if (!(a.coeff[1].re.numerator == 0 && a.coeff[1].im.numerator == 0))
+            {
+                if (a.coeff[1].re.numerator == 0 || a.coeff[1].im.numerator == 0)
+                {
+                    if (a.coeff[1].re.numerator != 0)
+                        if (a.coeff[1].re.numerator > 0)
+                            if (a.coeff[1].re.numerator == 1 && a.coeff[1].re.denominator == 1)
+                                os << "x";
+                            else
+                                os << "+" << a.coeff[1].re << "x";
+                        else
+                            if (a.coeff[1].re.numerator == -1 && a.coeff[1].re.denominator == 1)
+                                os << "-x";
+                            else
+                                os << a.coeff[1].re << "x";
+                    else
+                        if (a.coeff[1].im.numerator > 0)
+                            if (a.coeff[1].im.numerator == 1 && a.coeff[1].im.denominator == 1)
+                                os << "+ix";
+                            else
+                                os << "+" << a.coeff[1].im << "ix";
+                        else
+                            if (a.coeff[1].im.numerator == -1 && a.coeff[1].im.denominator == 1)
+                                os << "-ix";
+                            else
+                                os << a.coeff[1].im << "ix";
+                }
+                else
+                {
+                    os << "+(" << a.coeff[1].re;    
+                    if (a.coeff[1].im.numerator > 0)
+                        if (a.coeff[1].im.numerator == 1 && a.coeff[1].im.denominator == 1)
+                            os << "+i";
+                        else
+                            os << "+" << a.coeff[1].im << "i";
+                    else
+                        if (a.coeff[1].im.numerator == -1 && a.coeff[1].im.denominator == 1)
+                            os << a.coeff[1].im << "i";
+                    os << ")x";
+                }
+
+            }
+
+            if (a.coeff[0].re.numerator == 0 && a.coeff[0].im.numerator == 0)
+                return os;
+            if (a.coeff[0].re.numerator == 0 || a.coeff[0].im.numerator == 0)
+            {
+                if (a.coeff[0].re.numerator != 0)
+                    if (a.coeff[0].re.numerator > 0)
+                        os << "+" << a.coeff[0].re;
+                    else
+                        os << a.coeff[0].re;
+                else
+                {
+                    if (a.coeff[0].im.numerator > 0)
+                        os << "+" << a.coeff[0].im << "i";
+                    else
+                        os << a.coeff[0] << "i";
+                }
+            }
+            else
+            {
+                if (a.coeff[0].re.numerator > 0)
+                    os << "+" << a.coeff[0].re;
+                else
+                    os << a.coeff[0].re;
+                if (a.coeff[0].im.numerator > 0)
+                    if (a.coeff[0].im.numerator == 1 && a.coeff[0].im.denominator == 1)
+                        os << "+i";
+                    else
+                        os << "+" << a.coeff[0].im << "i";
+                else
+                    if (a.coeff[0].im.numerator == -1 && a.coeff[0].im.denominator == 1)
+                        os << "-i";
+                    else
+                        os << a.coeff[0].im << "i";
             }
         }
-        if (a.coeff[1] == 1)
-            os << "+x";
-        else
-        {
-            if (a.coeff[1] == -1)
-                os << "-x";
-            else
-                if (a.coeff[1].re > 0)
-                    os << "+"<< a.coeff[1] << "x";
-                else
-                    if (a.coeff[1].re != 0)
-                    os << a.coeff[1] << "x";
-        }
-        if (a.coeff[0] != 0)
-        {
-            if (a.coeff[0].re > 0)
-                os << "+" << a.coeff[0];
-            else
-                os << a.coeff[0];
-        }
+
     }
-
-
-
-    /*if(a.deg == 0)
-    {
-        os << a[0];
-        return os;
-    }
-
-    os << "(" << a[a.deg] << ")" << "x";
-    if(a.deg > 1)
-        os << "^" << a.deg;
-
-    for (int i = a.deg - 1; i > 1; i--)
-        if (a[i] != 0)
-            os << "+" << "(" << a[i] << ")" << "x^" << i;
-    if (a.deg > 1 && a[1] != 0)
-        os << "+" << "(" << a[1] << ")" << "x";
-    if (a.deg > 0 && a[0] != 0)
-        os << "+" << "(" << a[0] << ")";
-
-        */
     return os;
 }
 template<class Numb> std::istream& operator>>(std::istream& is, Polynom<Numb>& a)
@@ -218,6 +446,7 @@ template<class Numb> Polynom<Numb>::Polynom(const Polynom<Numb>& b)
     deg = b.deg;
     for (int i = 0; i < N; i++)
         coeff[i] = b.coeff[i];
+    exception = b.exception;
 }
 template<class Numb> Polynom<Numb>::Polynom(Numb b)
 {
@@ -312,8 +541,8 @@ template<class Numb> Polynom<Numb> Polynom<Numb>::operator-(const Polynom<Numb>&
 template<class Numb> Polynom<Numb> Polynom<Numb>::operator*(const Polynom<Numb>& b)
 {
     Polynom<Numb> c;
-   
-    if (!(((coeff[0].re == 0) && deg == 0 && coeff[0].im == 0) || ((b.coeff[0].re == 0) && (b.deg == 0) && b.coeff[0].im == 0)))
+
+    if (!(((coeff[0].re.numerator == 0) && deg == 0 && coeff[0].im.numerator == 0) || ((b.coeff[0].re.numerator == 0) && (b.deg == 0) && b.coeff[0].im.numerator == 0)))
     {
         for (int i = 0; i <= deg; i++)
         {
@@ -325,7 +554,7 @@ template<class Numb> Polynom<Numb> Polynom<Numb>::operator*(const Polynom<Numb>&
         }
 
         for (int i = deg + b.deg; i >= 0; i--)
-            if (c.coeff[i].re != 0 || c.coeff[0].im != 0)
+            if (c.coeff[i].re.numerator != 0 || c.coeff[i].im.numerator != 0)
             {
                 c.deg = i;
                 break;
@@ -343,7 +572,7 @@ template<class Numb> Polynom<Numb> Polynom<Numb>::operator/(const Polynom<Numb>&
     rem = *this;
     c.deg = rem.deg - b.deg;
 
-    while (rem.deg >= b.deg && !(rem[0].re == 0 && rem[0].im == 0 && rem.deg == 0))
+    while (rem.deg >= b.deg && !(rem[0].re.numerator == 0 && rem[0].im.numerator == 0 && rem.deg == 0))
     {
         c.coeff[rem.deg - b.deg] = rem.coeff[rem.deg]/b.coeff[b.deg];
         temp.multByPowOfX(rem.deg - b.deg);
@@ -424,7 +653,7 @@ template<class Numb> Polynom<Numb> Polynom<Numb>::operator-=(const Polynom<Numb>
 template<class Numb> Polynom<Numb> Polynom<Numb>::operator*=(const Polynom<Numb>& b)
 {
     Polynom c;
-    if (!(((coeff[0].getRe() == 0) && deg == 0 && coeff[0].im == 0) || ((b.coeff[0].getRe() == 0) && (b.deg == 0) && b.coeff[0].im == 0)))
+    if (!(((coeff[0].re.numerator == 0) && deg == 0 && coeff[0].im.numerator == 0) || ((b.coeff[0].re.numerator == 0) && (b.deg == 0) && b.coeff[0].im.numerator == 0)))
     {
         for (int i = 0; i <= deg; i++)
         {
