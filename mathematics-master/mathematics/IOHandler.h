@@ -194,12 +194,7 @@ public:
                     }
                     else
                     {
-                        input +=temp[i + 1];
-                        i = i + 1;
                         ++i;
-                        Polynom<Complex<Rational>>* K = new Polynom<Complex<Rational>>(input);
-                        result[j].addToken(K);
-                        input = "";
                         continue;
                     }
                 }   

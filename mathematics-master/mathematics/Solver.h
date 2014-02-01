@@ -298,10 +298,21 @@ public:
     Polynom<Complex<Rational>> execute(Result& r)
     {
         Polynom<Complex<Rational>> A = makeOPZ(makeEquals(r));
-        values.push_back(A);
-        if (keys.size() < values.size())
-            keys.push_back("");
-        newNames.setVariable(keys.back(), values.back());
+        if (A.exception.error == "No error")
+        {
+            values.push_back(A);
+            if (keys.size() < values.size())
+                keys.push_back("");
+            newNames.setVariable(keys.back(), values.back());
+            return A;
+        }
+        else
+        {
+            A.coeff[0].re.numerator = 10e8;
+            values.push_back(A);
+            if (keys.size() < values.size())
+                keys.push_back("");
+        }
         return A;
     }
 };

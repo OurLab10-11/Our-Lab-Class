@@ -26,6 +26,7 @@ public:
     Polynom(Numb);
     Polynom(std::string D)
     {
+        deg = 0;
         for (int i = 0; i < N; ++i)
         {
             coeff[i] = 0;
@@ -45,21 +46,30 @@ public:
             }
             else
             {
-                unsigned int i;
-                for (i = 0; i < D.length(); ++i)
-                    if (isalpha(D[i]))
-                        break;
-                if (i == D.length())
+                unsigned int i = 0;
+                bool flag = false;
+                while (i < D.size())
                 {
-                    coeff[0] = stod(D);
-                    deg = 0;
+                    if (D[i] == '.')
+                    {
+                        flag = true;
+                        break;
+                    }
+                    ++i;
+                }
+                if (flag)
+                {
+                    string rak = D;
+                    rak.erase(i,1);
+                    coeff[0].re.numerator = stoi(rak);
+                    rak = "1";
+                    for (unsigned int k = i + 1; k < D.size(); ++k)
+                        rak += '0';
+                    coeff[0].re.denominator = stoi(rak); 
                 }
                 else
-                {
-                    for(unsigned int j = 0; j < D.length(); ++j)
-                        coeff[i] = int(D[j]);
-                    deg = D.length() - 1;
-                }
+                    coeff[0].re.numerator = stoi(D);
+                coeff[0].re.makeGood();
             }
         }
     }
@@ -571,7 +581,11 @@ template<class Numb> Polynom<Numb> Polynom<Numb>::operator/(const Polynom<Numb>&
     Polynom rem;
     rem = *this;
     c.deg = rem.deg - b.deg;
-
+    if (b.deg == 0 && b.coeff[0].re.numerator == 0)
+    {
+        c.exception.error = "Division by 0";
+        return c;
+    }
     while (rem.deg >= b.deg && !(rem[0].re.numerator == 0 && rem[0].im.numerator == 0 && rem.deg == 0))
     {
         c.coeff[rem.deg - b.deg] = rem.coeff[rem.deg]/b.coeff[b.deg];

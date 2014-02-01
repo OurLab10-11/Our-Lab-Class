@@ -3,8 +3,7 @@
 #include <iostream>
 class Rational
 {
-private:
-	
+public:
     void makeGood()
     {
         bool flag;
@@ -41,7 +40,7 @@ private:
 	    this->denominator /= divider;
 
 };
-public:
+
     int numerator;
 	int denominator;
 	Rational()
