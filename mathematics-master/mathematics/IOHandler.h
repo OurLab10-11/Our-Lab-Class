@@ -81,9 +81,9 @@ public:
             {
                 if (temp[i] == ' ')
                     break;
-                if (temp[i] == '-'&& i > 0 && ((isOperation(temp[i - 1]) || (temp[i - 1]) == '(' || temp[i - 1] == '[')))
+                if (temp[i] == '-'&& i > 0 && temp[i-1] != '%' && ((isOperation(temp[i - 1]) || (temp[i - 1]) == '(' || temp[i - 1] == '[')))
                 { 
-                    input += "-";
+                    input += temp[i];
                     ++i;
                     continue;
                 }

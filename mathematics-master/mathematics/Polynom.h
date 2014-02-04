@@ -46,30 +46,37 @@ public:
             }
             else
             {
-                unsigned int i = 0;
-                bool flag = false;
-                while (i < D.size())
+                if (isalpha(D[0]))
                 {
-                    if (D[i] == '.')
-                    {
-                        flag = true;
-                        break;
-                    }
-                    ++i;
-                }
-                if (flag)
-                {
-                    string rak = D;
-                    rak.erase(i,1);
-                    coeff[0].re.numerator = stoi(rak);
-                    rak = "1";
-                    for (unsigned int k = i + 1; k < D.size(); ++k)
-                        rak += '0';
-                    coeff[0].re.denominator = stoi(rak); 
+                    ;
                 }
                 else
-                    coeff[0].re.numerator = stoi(D);
-                coeff[0].re.makeGood();
+                {
+                    unsigned int i = 0;
+                    bool flag = false;
+                    while (i < D.size())
+                    {
+                        if (D[i] == '.')
+                        {
+                            flag = true;
+                            break;
+                        }
+                        ++i;
+                    }
+                    if (flag)
+                    {
+                        string rak = D;
+                        rak.erase(i,1);
+                        coeff[0].re.numerator = stoi(rak);
+                        rak = "1";
+                        for (unsigned int k = i + 1; k < D.size(); ++k)
+                            rak += '0';
+                        coeff[0].re.denominator = stoi(rak); 
+                    }
+                    else
+                        coeff[0].re.numerator = stoi(D);
+                    coeff[0].re.makeGood();
+                }
             }
         }
     }
@@ -125,16 +132,19 @@ template<class Numb> std::ostream& operator<<(std::ostream& os, Polynom<Numb> a)
             if (a.coeff[0].re.numerator > 0)
             {
                 os << a.coeff[0].re;
-                if (a.coeff[0].im.numerator == 0)
-                    return os;
-                if (a.coeff[0].im.numerator == 1 && a.coeff[0].im.denominator == 1)
-                    os << "+i";
-                if (a.coeff[0].im.numerator == -1 && a.coeff[0].im.denominator == 1)
-                    os << "-i";
-                if (a.coeff[0].im.numerator > 0 && a.coeff[0].im.numerator != 1 && a.coeff[0].im.denominator == 1)
-                    os << "+" << a.coeff[0].im << "i";
-                if (a.coeff[0].im.numerator < 0 && a.coeff[0].im.numerator != -1 && a.coeff[0].im.denominator == 1)
-                    os << a.coeff[0].im << "i";
+                if (a.coeff[0].im.numerator != 0)
+                {
+                if (a.coeff[0].im.numerator > 0)
+                    if (a.coeff[0].im.numerator == 1 && a.coeff[0].im.denominator == 1)
+                        os << "+i";
+                    else
+                        os << "+" << a.coeff[0].im << "i";
+                else
+                    if (a.coeff[0].im.numerator == -1 && a.coeff[0].im.denominator == 1)
+                        os << "-i";
+                    else
+                        os << a.coeff[0].im << "i";
+                }
                 return os;
             }
             else
